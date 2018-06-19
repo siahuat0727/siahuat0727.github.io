@@ -227,7 +227,7 @@ void sudoku_solve(Sudoku *thiz)
                 if(sudoku_can_fill(thiz, r, c, n)) {
                     num_can_fill++;
                     t = n;
-                    if (num_can_fill > 1) // pruning
+                    if (num_can_fill > 1) // pruning   
                         break;
                 }
             }

@@ -95,7 +95,6 @@ bool can_fill(int r, int c, int n)
 *`box`表示数独中的宫 (小 3x3)。*
 *第 19 行`r_start = r/3 * 3`取得`r`所在之宫的 row 起始位置，`c_start` 同理。*
 
-https://github.com/siahuat0727/sudoku/blob/69f3e69ef1e4fb4d956b009e405cb916059e5c14/sudoku1.c#L85-L95
 
 ## 解法二： 优化版 Backtracking
 

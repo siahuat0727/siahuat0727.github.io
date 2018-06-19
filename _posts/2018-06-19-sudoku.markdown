@@ -6,12 +6,12 @@ tags:
     - 数独
 ---
 
-# 前言
+## 前言
 
 解数独是刚接触程式时的第一份作业，
 如果有大神路过，
 
-# 解法一： Backtracking
+## 解法一： Backtracking
 
 这大概是最常见的解法，[bactracking](https://en.wikipedia.org/wiki/Backtracking)的精神就不在此赘述，大概就是按照一定的顺序进行[试错](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99)([trial and error](https://en.wikipedia.org/wiki/Trial_and_error))，若某一步走不下去了便返回上一步继续之前的试错。
 
@@ -19,14 +19,14 @@ tags:
 
 [gif 来源点击这里](https://en.wikipedia.org/wiki/Backtracking#/media/File:Sudoku_solved_by_bactracking.gif)
 
-```c++
+```c
 #define N 9
 
 int ans_count;
 int sudoku[N][N];
 ```
 *`sudoku[N][N]`储存 9x9 格的数字，０表示空白。*
-```c++=
+```c
 void next_bt(int r, int c)
 {
     c == N-1 ? bt(r+1, 0) : bt(r, c+1);
@@ -95,7 +95,9 @@ bool can_fill(int r, int c, int n)
 *`box`表示数独中的宫 (小 3x3)。*
 *第 19 行`r_start = r/3 * 3`取得`r`所在之宫的 row 起始位置，`c_start` 同理。*
 
-# 解法二： 优化版 Backtracking
+https://github.com/siahuat0727/sudoku/blob/69f3e69ef1e4fb4d956b009e405cb916059e5c14/sudoku1.c#L85-L95
+
+## 解法二： 优化版 Backtracking
 
 解法一的 `can_fill(r, c, n)` 每次重新看过空白处所在之行、列、宫是否存在数字`n`，而这件事可以通过新增一些变数来实时记录。（非常经典的用**空间**换**时间**）
 ```c++
@@ -123,17 +125,21 @@ bool can_fill(int r, int c, int n)
 而我们只需要在每次更改数独中的值时同步更新这些变数：
 
 也就是将解法一的 `bt(r, c)` 中的
-```c++=18
+
+```c
                 sudoku[r][c] = n;
                 next_bt(r, c);
                 sudoku[r][c] = 0;
 ```
+
 改为：
-```c++=18
+
+```c
                 fill(r, c, n);
                 next_bt(r, c);
                 erase(r, c, n);
 ```
+
 其中
 ```c++
 void _fill(int r, int c, int n, bool b)
@@ -155,7 +161,7 @@ void erase(int r, int c, int n)
 }
 ```
 
-# 解法三： 初步拟人解法
+## 解法三： 初步拟人解法
 
 解法一、二虽然可行，但每一步都用猜的，具不确定性，而很多时候有些空白处就只能填一个数字。（是確定的）
 若每次都先填入这些已知正确的数字，就可以减少很多不必要的尝试。
@@ -199,7 +205,7 @@ typedef struct _Sudoku{
 } Sudoku;
 ```
 主体
-```c++=
+```c
 void sudoku_solve(Sudoku *thiz)
 {
     int num_filled, num_unsolved;
@@ -258,16 +264,19 @@ void sudoku_solve(Sudoku *thiz)
 #define FOR_FOR_EACH_EMPTY_CELL(r, c, s) FOR_N(r) FOR_N(c) if(s->grid[r][c] == 0)
 #define FOR_EACH_NUM(n) for (int n = 1; n <= N; ++n)
 ```
+
 *由于有些时候遍历 0-8，有些则遍历 1-9，为了减少不必要的 bug，将其定义为 [macro](https://gcc.gnu.org/onlinedocs/cpp/Macros.html)*
 
 另外，本法相较与 backtracking 的绝对优势就是，它可以快速发现该数独无解！（若未曾试错）
 即每次填入数字都是确定的，那么在这种假设下，若有一个空白处无法填入任何数字，则表示无解。
 这部分在主体中的：
-```c++=17
+
+```c++
             if (num_can_fill == 0)
                 return;
 ```
-# 解法四： 环保拟人解法
+
+## 解法四： 环保拟人解法
 
 解法三中，影印的比喻是为了配合程式实作上的便利，我想实际上一般人不会这么做。通常大家是先用原子笔填入确定正确之数字，不确定的部分改用铅笔填写，发现错了就把用铅笔填的擦掉。（用铅笔之后又遇到瓶颈时就想象用更浅的铅笔来填）
 
@@ -277,7 +286,7 @@ void sudoku_solve(Sudoku *thiz)
 
 以下借用 C++ 的 stack 来完成
 
-```c++=
+```c++
 void _sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
 {
     int n_filled, n_unsolved;
@@ -343,7 +352,7 @@ void sudoku_solve(Sudoku *thiz, bool record=false)
 *可以发现第 40 行处不需要像 解法三 一样复制整个数独了*
 >原本想说这部分只写成一个 function（感觉比较完整？），但 `_sudoku_solve` 共有三个有可能 return 的地方(19、44、47行)，不知若要在 return 前把 stack 里记录的数字 `erase` 掉，是要利用 goto 好呢，还是像这样拆成两个 function 呢？又或是有其它解法呢？
 
-# 解法五： 进阶拟人解法
+## 解法五： 进阶拟人解法
 
 一个数字确定为某格子的解，除了该格子就只能填一个数字之外，还有其他情况，比如在某一**行**中，某个数字就只能填在该行某一空白处时，则该数字为该空白处之解。
 同理，以**列**和**宫**的角度也一样。
@@ -354,15 +363,15 @@ void sudoku_solve(Sudoku *thiz, bool record=false)
 
 ![](https://i.imgur.com/6mJ0M6H.png)
 
-*图中 row 集合表示以 row 的角度来观察可得出之解集合*
-*如 * 位于可由 **cell** 或 **row**、不可由 **col** 或 **box** 观察得出之解集合*
-*[Venn diagram](https://en.wikipedia.org/wiki/Venn_diagram) with [n = 4](https://en.wikipedia.org/wiki/File:Venn%27s_four_ellipse_construction.svg)*
+_图中 row 集合表示以 row 的角度来观察可得出之解集合_  
+_如 * 位于可由 **cell** 或 **row**、不可由 **col** 或 **box** 观察得出之解集合_  
+_[Venn diagram](https://en.wikipedia.org/wiki/Venn_diagram) with [n = 4](https://en.wikipedia.org/wiki/File:Venn%27s_four_ellipse_construction.svg)_
 
 用越多角度来观察越有机会降低试错的次数，但这也造成一定的 overhead，具体哪种解法比较快因数独难度而异。
 
 解法五中，我们从行、列、宫、格四种角度寻解。新增三种角度寻找的过程与以格的角度（参考解法三）类似，于是写了 ~~乱乱的~~ macro。
 
-```c=
+```c++
 #define FILL_IF_EXACTLY_ONE(LOOP1, LOOP2, arg1, arg2, \
         arg3, arg4, count_unsolved, extra_stmt) \
     do { \
@@ -467,5 +476,5 @@ void sudoku_solve(Sudoku *thiz)
 
 当然我们也可以很容易设计出有利于特定角度的数独，比如下图的数独在只有在有**行**的角度观察时可马上得知无解，反之则无法在可接受时间内得出结论。
 
-# 效能分析
+## 效能分析
 

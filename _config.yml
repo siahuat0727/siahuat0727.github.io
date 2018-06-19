@@ -44,6 +44,7 @@ markdown: kramdown
 kramdown:
   input: GFM                            # use Github Flavored Markdown !important
   syntax_highlighter: rouge
+  hard_wrap: true
 
   syntax_highlighter_opts:
     span:

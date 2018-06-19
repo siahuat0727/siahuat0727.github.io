@@ -3,8 +3,17 @@ layout: post
 title : "几种数独程式解法的设计与分析"
 author: "siahuat0727"
 tags:
+    - sudoku
     - 数独
+    - 设计
+    - 实作
+    - 分析
+    - 拟人解法
+    - C
+    - C++
 ---
+
+
 
 ## 前言
 
@@ -15,16 +24,18 @@ tags:
 
 这大概是最常见的解法，[bactracking](https://en.wikipedia.org/wiki/Backtracking)的精神就不在此赘述，大概就是按照一定的顺序进行[试错](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99)([trial and error](https://en.wikipedia.org/wiki/Trial_and_error))，若某一步走不下去了便返回上一步继续之前的试错。
 
-以下为使用此法解数独的过程：
+以下为使用此法解数独的过程： [gif 来源](https://en.wikipedia.org/wiki/Backtracking#/media/File:Sudoku_solved_by_bactracking.gif)
 
-[gif 来源点击这里](https://en.wikipedia.org/wiki/Backtracking#/media/File:Sudoku_solved_by_bactracking.gif)
+![](/img/in-post/sudoku/backtracking_sudoku.gif)
 
-```c
+
+
+```c?line_numbers=true
 #define N 9
-
 int ans_count;
 int sudoku[N][N];
 ```
+
 *`sudoku[N][N]`储存 9x9 格的数字，０表示空白。*
 ```c
 void next_bt(int r, int c)
@@ -204,7 +215,7 @@ typedef struct _Sudoku{
 } Sudoku;
 ```
 主体
-```c
+```c++
 void sudoku_solve(Sudoku *thiz)
 {
     int num_filled, num_unsolved;
@@ -258,7 +269,7 @@ void sudoku_solve(Sudoku *thiz)
 
 其中
 
-```c++
+```c
 #define FOR_N(i) for (int i = 0; i < N; ++i)
 #define FOR_FOR_EACH_EMPTY_CELL(r, c, s) FOR_N(r) FOR_N(c) if(s->grid[r][c] == 0)
 #define FOR_EACH_NUM(n) for (int n = 1; n <= N; ++n)
@@ -299,7 +310,7 @@ void _sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
                 if(sudoku_can_fill(thiz, r, c, n)) {
                     n_can_fill++;
                     t = n;
-                    if (n_can_fill > 1) // pruning
+                    if (n_can_fill > 1) // pruning  
                         break;
                 }
             }

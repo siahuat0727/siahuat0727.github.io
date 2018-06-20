@@ -1,6 +1,6 @@
 ---
 layout: post
-title : "几种数独程式解法的设计与分析"
+title : "数独演算法的设计、优化与分析"
 author: "siahuat0727"
 tags:
     - sudoku
@@ -18,15 +18,13 @@ tags:
 解数独是刚接触程式时的第一份作业，
 如果有大神路过，
 
-## 解法一： Backtracking
+## 解法一： 传统 Backtracking
 
 这大概是最常见的解法，[bactracking](https://en.wikipedia.org/wiki/Backtracking)的精神就不在此赘述，大概就是按照一定的顺序进行[试错](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99)([trial and error](https://en.wikipedia.org/wiki/Trial_and_error))，若某一步走不下去了便返回上一步继续之前的试错。
 
 以下为使用此法解数独的过程： [gif 来源](https://en.wikipedia.org/wiki/Backtracking#/media/File:Sudoku_solved_by_bactracking.gif)
 
 ![](/img/in-post/sudoku/backtracking_sudoku.gif)
-
-
 
 ```c?line_numbers=true
 #define N 9
@@ -100,7 +98,7 @@ bool can_fill(int r, int c, int n)
     return can_fill_row(r, n) && can_fill_col(c, n) && can_fill_box(r, c, n);
 }
 ```
-*`can_fill_row(r, n)`寻找第 `r` raw是否已存在数字`n`，以此类推。*
+*`can_fill_row(r, n)`寻找第 `r` row是否已存在数字`n`，以此类推。*
 *`box`表示数独中的宫 (小 3x3)。*
 *第 19 行`r_start = r/3 * 3`取得`r`所在之宫的 row 起始位置，`c_start` 同理。*
 
@@ -169,9 +167,9 @@ void erase(int r, int c, int n)
 }
 ```
 
-## 解法三： 初步拟人解法
+## 解法三： 初步拟人
 
-解法一、二虽然可行，但每一步都用猜的，具不确定性，而很多时候有些空白处就只能填一个数字。（是確定的）
+解法一、二虽然可行，但每一步都用猜的，具不确定性，而很多时候有些空白处就只能填一个数字。（是确定的）
 若每次都先填入这些已知正确的数字，就可以减少很多不必要的尝试。
 
 在较难的数独上，我们也会遇到瓶颈（每个空白处都有超过一个数字可填），这时可以选择一个空白处进行试错后，再重复本解法。(有一点点Backtracking的感觉)
@@ -182,7 +180,7 @@ void erase(int r, int c, int n)
 啰嗦几句，为什么要拿去影印呢？
 举个例子，当我们遇到瓶颈时，若先尝试在某一格填入数字 2，解一解发现无解（某空白处无法被填入任何数字），这表示刚刚猜的数字 2 是错误的，那么假设没有事先影印，就没办法恢复到之前的状态了。
 
-先以 code + pseudo code 的方式呈现：
+先以 pseudo code 的方式呈现：
 
 ```
 solve(Sudoku s)
@@ -196,9 +194,8 @@ solve(Sudoku s)
     if (没空白处了) {
         输出解
     } else {
-        寻找第一个空白处
         for each 第一个空白处的可填数字 n:
-            s'  <--  s 填入 数字n
+            s'  <-  s 填入 数字n
             solve(s')
     }
 }
@@ -227,11 +224,11 @@ void sudoku_solve(Sudoku *thiz)
                 if(sudoku_can_fill(thiz, r, c, n)) {
                     num_can_fill++;
                     t = n;
-                    if (num_can_fill > 1) // pruning   
+                    if (num_can_fill > 1) // pruning
                         break;
                 }
             }
-            if (num_can_fill == 0)
+            if (num_can_fill == 0) // no solution
                 return;
             if (num_can_fill == 1) {
                 sudoku_fill(thiz, r, c, t);
@@ -268,9 +265,9 @@ void sudoku_solve(Sudoku *thiz)
 其中
 
 ```c
-#define FOR_N(i) for (int i = 0; i < N; ++i)
-#define FOR_FOR_EACH_EMPTY_CELL(r, c, s) FOR_N(r) FOR_N(c) if(s->grid[r][c] == 0)
-#define FOR_EACH_NUM(n) for (int n = 1; n <= N; ++n)
+#define FOR_N(i) for (int i = 0; i < N; ++i)    
+#define FOR_FOR_EACH_EMPTY_CELL(r, c, s) FOR_N(r) FOR_N(c) if(s->grid[r][c] == 0)    
+#define FOR_EACH_NUM(n) for (int n = 1; n <= N; ++n)    
 ```
 
 *由于有些时候遍历 0-8，有些则遍历 1-9，为了减少不必要的 bug，将其定义为 [macro](https://gcc.gnu.org/onlinedocs/cpp/Macros.html)*
@@ -284,13 +281,15 @@ void sudoku_solve(Sudoku *thiz)
                 return;
 ```
 
-## 解法四： 环保拟人解法
+## 解法四： 环保拟人
+
+每次遇到瓶颈都要复制一整个 Sudoku (9×9=**81 int** + 3×9×10=**270 bool**)，好像没必要？
 
 解法三中，影印的比喻是为了配合程式实作上的便利，我想实际上一般人不会这么做。通常大家是先用原子笔填入确定正确之数字，不确定的部分改用铅笔填写，发现错了就把用铅笔填的擦掉。（用铅笔之后又遇到瓶颈时就想象用更浅的铅笔来填）
 
 我们可以运用 [stack](http://www.cplusplus.com/reference/stack/stack/) 来保留每次开始尝试之后所填下的数字。
 
-这种做法实际上不会比较快（维护 stack 所需的时间成本较高），但就算一直遇到瓶颈也只会存在一份数独。
+这种做法实际上不会比较快（维护 stack 所需的时间成本较高），但好处是就算一直遇到瓶颈也只会存在一份数独。
 
 以下借用 C++ 的 stack 来完成
 
@@ -312,7 +311,7 @@ void _sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
                         break;
                 }
             }
-            if (n_can_fill == 0)
+            if (n_can_fill == 0) // no solution
                 return;
             if (n_can_fill == 1) {
                 sudoku_fill(thiz, r, c, t);
@@ -360,22 +359,23 @@ void sudoku_solve(Sudoku *thiz, bool record=false)
 *可以发现第 40 行处不需要像 解法三 一样复制整个数独了*
 >原本想说这部分只写成一个 function（感觉比较完整？），但 `_sudoku_solve` 共有三个有可能 return 的地方(19、44、47行)，不知若要在 return 前把 stack 里记录的数字 `erase` 掉，是要利用 goto 好呢，还是像这样拆成两个 function 呢？又或是有其它解法呢？
 
-## 解法五： 进阶拟人解法
+## 解法五： 进阶拟人
 
-一个数字确定为某格子的解，除了该格子就只能填一个数字之外，还有其他情况，比如在某一**行**中，某个数字就只能填在该行某一空白处时，则该数字为该空白处之解。
-同理，以**列**和**宫**的角度也一样。
+只有某格只能填一个数字时才能确定该格的解吗？
+其实还有很多情况，比如在某一**行**中，某个数字就只能填在该行某一空白处时，则该数字为该空白处之解。
+同理，以**列**和**宫**的角度出发也一样。
 
-也就是说，我们除了以**格**的角度（某格是否只能填一个数字）来寻解之外，亦可以以**行**、**列**、**宫**的角度来观察。
+也就是说，我们除了以**格**的角度（某空白处是否只能填一个数字）来寻解之外，亦可以以**行**、**列**、**宫**的角度来观察。
 
 如下图所示，每个观察角度的求解能力（可得出之**解集合**）是不同的：
 
-![](https://i.imgur.com/6mJ0M6H.png)
+![](/img/in-post/sudoku/PowerOfRowColBoxCell.png)
 
-_图中 row 集合表示以 row 的角度来观察可得出之解集合_  
-_如 * 位于可由 **cell** 或 **row**、不可由 **col** 或 **box** 观察得出之解集合_  
-_[Venn diagram](https://en.wikipedia.org/wiki/Venn_diagram) with [n = 4](https://en.wikipedia.org/wiki/File:Venn%27s_four_ellipse_construction.svg)_
+_图中 row 集合表示以 row 的角度来观察可得出解之空白处集合， col、box、cell 同理_  
+_[Venn diagram](https://en.wikipedia.org/wiki/Venn_diagram) with [n = 4](https://en.wikipedia.org/wiki/File:Venn%27s_four_ellipse_construction.svg)_  
+_[此图进一步解释](#解释)_
 
-用越多角度来观察越有机会降低试错的次数，但这也造成一定的 overhead，具体哪种解法比较快因数独难度而异。
+因此用越多角度来观察越有机会降低试错的次数，但这也造成一定的 overhead，具体哪种解法比较快因数独难度而异。
 
 解法五中，我们从行、列、宫、格四种角度寻解。新增三种角度寻找的过程与以格的角度（参考解法三）类似，于是写了 ~~乱乱的~~ macro。
 
@@ -480,9 +480,55 @@ void sudoku_solve(Sudoku *thiz)
 
 > 觉得这里为了 [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) 写得有点乱，尤其 box 角度需要在 for 里存两个资讯（其他三种只需要一个），用了 `extra_stmt`(11行) 和 `t2=c`(47行) 乱解，盼望有缘人来指点（（
 
-再次强调，上述四种角度，单用任何一种或是组合使用都可以在有限时间内求解简单数独。
+再次强调，上述四种观察角度，单用任何一种或是组合使用都可以在有限时间内求解简单数独。
 
-当然我们也可以很容易设计出有利于特定角度的数独，比如下图的数独在只有在有**行**的角度观察时可马上得知无解，反之则无法在可接受时间内得出结论。
+## 解法6： 优先试错
+
+遇到瓶颈时，针对哪个空白处进行试错最佳呢？
+答案大概很复杂，但我们可以用很简单的方式找到较佳的位置：**最少可填数的格子**
+原因是**平均**来说需要较少的试错就能找到该格子的解
+
+将 解法5 的最后部分替换为
+```c
+        int Min = N;
+        int r_min = 0, c_min = 0;
+        // find the empty cell with fewest possible answer
+        FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
+            int num_can_fill = 0; 
+            FOR_EACH_NUM(n) {
+                if (sudoku_can_fill(thiz, r, c, n)) {
+                    ++num_can_fill;
+                }
+            }
+            if (num_can_fill < Min) {
+                Min = num_can_fill;
+                r_min = r;
+                c_min = c;
+            }
+        }
+        // try to fill and solve it
+        FOR_EACH_NUM(n) {
+            if (sudoku_can_fill(thiz, r_min, c_min, n)) {
+                sudoku_fill(thiz, r_min, c_min, n);
+
+                // copy and solve
+                Sudoku sudoku_tmp;
+                memcpy(&sudoku_tmp, thiz, sizeof(Sudoku));
+                sudoku_solve(&sudoku_tmp);
+
+                sudoku_erase(thiz, r_min, c_min, n);
+            }
+        }
+```
 
 ## 效能分析
+
+
+
+## 解释
+
+![](/img/in-post/sudoku/PowerOfRowColBoxCell.png)
+
+
+_如 w 位于可由 **cell** 或 **row**、不可由 **col** 或 **box** 观察得出之解集合_  
 

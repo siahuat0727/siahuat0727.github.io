@@ -12,17 +12,19 @@ tags:
     - 分析
     - 拟人
     - C
-    - C++
 ---
 
 ## 前言
 
-解数独是刚接触程式时的第一份作业，
-如果有大神路过，
+解数独是刚接触程式时的第一份作业，当时有很多想法但都写不太出来，也找不太到相关想法的实作（大概还不会 google 吧），于是以它作为写 blog 的开始。
+这或许不是最好的入门教学但我想应该是最啰嗦的（
+另外，非常欢迎路过的有缘人提出建议啦～无论变数命名、设计或是这篇文的定位，任何东西都欢迎提噢！
+
+[Github repo 完整 code](https://github.com/siahuat0727/sudoku)
 
 ## 解法一： 传统 Backtracking
 
-这大概是最常见的解法，[bactracking](https://en.wikipedia.org/wiki/Backtracking)的精神就不在此赘述，大概就是按照一定的顺序进行[试错](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99)([trial and error](https://en.wikipedia.org/wiki/Trial_and_error))，若某一步走不下去了便返回上一步继续之前的试错。
+这大概是最常见的解法，[backtracking](https://en.wikipedia.org/wiki/Backtracking) 的精神就不在此赘述，大概就是按照一定的顺序进行[试错](https://zh.wikipedia.org/wiki/%E8%AF%95%E9%94%99)([trial and error](https://en.wikipedia.org/wiki/Trial_and_error))，若某一步走不下去了便返回上一步继续之前的试错
 
 以下为使用此法求解数独的过程： [gif 来源](https://en.wikipedia.org/wiki/Backtracking#/media/File:Sudoku_solved_by_bactracking.gif)
 
@@ -65,7 +67,7 @@ void bt(int r, int c)
 ```
 *`next_bt(r, c)`由左至右，由上而下,依序进行试错*
 *`bt(r, c)`对数独的第`r`row, 第`c`col试错*
->原本看到`next_bt(r, c)`这种只有一两行的 funcion 想说加上 [inline](http://en.cppreference.com/w/cpp/language/inline) 减少 call function 的 overhead 来增快速度，实测上也确实有微小的增快，而 GNU 自带的 [optimization flag](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) 增快的幅度是以倍数来计算的！加上 inline 的优化后反而慢了一点……所以如果可以自己 compile 的话或许就不用考虑用 inline 来加速吧。
+>原本看到`next_bt(r, c)`这种只有一两行的 funcion 想说加上 [inline](http://en.cppreference.com/w/cpp/language/inline) 减少 call function 的 overhead 来加快速度，实测上也确实有微小的加速，但 GNU 自带的 [optimization flag](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) 增快的幅度会是以倍数来计算的，而加上 inline 的优化后反而慢了一点……所以如果可以自行 compile 或许就不用考虑用 inline 来加速吧。
 
 ```c++
 bool can_fill_row(int r, int n)
@@ -129,9 +131,9 @@ bool can_fill(int r, int c, int n)
 *`get_box(r, c)`找到`r, c`对应的`box`编号。编号由左至右，由上而下，依序为 0-8。其对应关系通过尝试几组`r, c`不难发觉。*
 
 于是，原本 O(n) 的`can_fill(r, c, n)`就可以在 O(1) 时间内完成了！~~（虽然原本的 O(n) 的 n 也只是 9）~~
+[Big O notation](https://en.wikipedia.org/wiki/Big_O_notation)
 
-更改数独时同步更新变数：
-
+更改数独时同步更新变数
 也就是将解法一的 `bt(r, c)` 中的
 
 ```c
@@ -140,7 +142,7 @@ bool can_fill(int r, int c, int n)
                 sudoku[r][c] = 0;
 ```
 
-替换为：
+替换为
 
 ```c
                 fill(r, c, n);
@@ -150,7 +152,7 @@ bool can_fill(int r, int c, int n)
 
 其中
 ```c++
-void _fill(int r, int c, int n, bool b)
+void do_fill(int r, int c, int n, bool b)
 {
     row[r][n] = b;
     col[c][n] = b;
@@ -160,12 +162,12 @@ void _fill(int r, int c, int n, bool b)
 
 void fill(int r, int c, int n)
 {
-    _fill(r, c, n, true);
+    do_fill(r, c, n, true);
 }
 
 void erase(int r, int c, int n)
 {
-    _fill(r, c, n, false);
+    do_fill(r, c, n, false);
 }
 ```
 
@@ -221,11 +223,11 @@ void sudoku_solve(Sudoku *thiz)
         num_unsolved = 0;
         FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
             int num_can_fill = 0;
-            int t;
+            int nn;
             FOR_EACH_NUM(n) {
                 if(sudoku_can_fill(thiz, r, c, n)) {
                     num_can_fill++;
-                    t = n;
+                    nn = n;
                     if (num_can_fill > 1) // pruning
                         break;
                 }
@@ -233,7 +235,7 @@ void sudoku_solve(Sudoku *thiz)
             if (num_can_fill == 0) // no solution
                 return;
             if (num_can_fill == 1) {
-                sudoku_fill(thiz, r, c, t);
+                sudoku_fill(thiz, r, c, nn);
                 num_filled++;
             } else
                 num_unsolved++;
@@ -247,14 +249,11 @@ void sudoku_solve(Sudoku *thiz)
         FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
             FOR_EACH_NUM(n) {
                 if (sudoku_can_fill(thiz, r, c, n)) {
-                    sudoku_fill(thiz, r, c, n);
-
-                    // copy and solve
                     Sudoku sudoku_tmp;
                     memcpy(&sudoku_tmp, thiz, sizeof(Sudoku));
-                    sudoku_solve(&sudoku_tmp);
 
-                    sudoku_erase(thiz, r, c, n);
+                    sudoku_fill(&sudoku_tmp, r, c, n);
+                    sudoku_solve(&sudoku_tmp);
                 }
             }
             return;
@@ -262,7 +261,7 @@ void sudoku_solve(Sudoku *thiz)
     }
 }
 ```
-*小 function 们都与之前的类似，只是新增对哪个 sudoku 做操作。比如`sudoku_can_fill(thiz, r, c, n)`与`can_fill(r, c, n)`， 前者表示针对数独`thiz`检查位置`r, c`可否填入`n`。*
+*小 function 们都与之前的类似，只是新增对哪个 sudoku 做操作。比如`sudoku_can_fill(thiz, r, c, n)`和`can_fill(r, c, n)`， 前者表示针对数独`thiz`检查位置`r, c`能否填入`n`。*
 
 其中
 
@@ -274,20 +273,11 @@ void sudoku_solve(Sudoku *thiz)
 
 *由于有些地方遍历 0-8，有些则遍历 1-9，为了减少不必要的 bug，将其定义为 [macro](https://gcc.gnu.org/onlinedocs/cpp/Macros.html)*
 
-另外，本法相较与 backtracking 的绝对优势就是，它可以快速发现当下数独无解！
-即每次填入数字都是确定的，那么在这种假设下，若有任一空白处无法填入任何数字，则表示无解。
-这部分在主体中的：
-
-```c++
-            if (num_can_fill == 0) // no solution
-                return;
-```
-
 ## 解法四： 环保拟人
 
 每次遇到瓶颈都要复制一整个 Sudoku (9×9=**81 int** + 3×9×10=**270 bool**)，好像没必要？
 
-解法三中，影印的比喻是为了配合程式实作上的便利，我想实际上一般人不会这么做。通常（在无法推理又想解出来时）大家会先用原子笔填入确定解，不确定的部分改用铅笔填写，发现错了就把用铅笔填的擦掉。（用铅笔之后又遇到瓶颈时就想象用更浅的铅笔来填）
+解法三中，影印的比喻是为了配合程式实作上的便利，我想实际上一般人不会这么做。通常（在无法推理又想解出来时）大家会用原子笔填入确定解，而不确定的部分改用铅笔填写，发现错了就把用铅笔填的擦掉。（用铅笔之后又遇到瓶颈时就想象用更浅的铅笔来填）
 
 我们可以运用 [stack](http://www.cplusplus.com/reference/stack/stack/) 来保留每一轮填下的数字。
 
@@ -296,7 +286,7 @@ void sudoku_solve(Sudoku *thiz)
 以下借用 C++ 的 stack 来完成
 
 ```c++
-void _sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
+void do_sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
 {
     int num_filled, num_unsolved;
     do {
@@ -347,27 +337,25 @@ void _sudoku_solve(Sudoku *thiz, stack<Cell> *s, bool record)
 void sudoku_solve(Sudoku *thiz, bool record=false)
 {
     stack<Cell> s;
-    _sudoku_solve(thiz, &s, record);
-    if(record) {
-        while(!s.empty()) {
-            Cell cell = s.top();
-            sudoku_erase(thiz, cell.r, cell.c, cell.n);
-            s.pop();
-        }
+    do_sudoku_solve(thiz, &s, record);
+    while(!s.empty()) {
+        Cell cell = s.top();
+        sudoku_erase(thiz, cell.r, cell.c, cell.n);
+        s.pop();
     }
 }
 ```
 *`record`default 为 `false` 是因为第一次不用记录（所有答案都是确定正确的）*
 *可以发现第 40 行处不需要像 解法三 一样复制整个数独了*
->原本想说这部分只写成一个 function（感觉比较完整？），但 `_sudoku_solve` 共有三个有可能 return 的地方(19、44、47行)，不知若要在 return 前把 stack 里记录的数字 `erase` 掉，是要利用 goto 好呢，还是像这样拆成两个 function 呢？又或是有其它解法呢？
+>原本想说这部分只写成一个 function（感觉比较完整？），但 `do_sudoku_solve` 共有三个有可能 return 的地方(19、44、47行)，不知若要在 return 前把 stack 里记录的数字 `erase` 掉，是要利用 goto 好呢，还是像这样拆成两个 function 呢？又或是有其它解法呢？
 
-## 解法五： 进阶拟人
+## 解法五： 四角拟人
 
 只有某格只能填一个数字时才能确定该格的解？
-其实还有很多情况，比如在某一**行**中，某个数字就只能填在该行某一空白处时，则该数字为该空白处之解。
+其实还有很多情况，比如在某一**行**中，某个数字就只能填在该行某一空白处时，则该数字为该空白处的解。
 同理，以**列**和**宫**的角度出发也一样。
 
-也就是说，我们除了以**格**的角度（某空白处只能填一个数字）来寻解之外，亦可以以**行**、**列**、**宫**的角度来观察。
+也就是说，我们除了以**格**的角度（某空白处只能填一个数字）来寻解之外，亦可以**行**、**列**、**宫**的角度来观察。
 
 而每个观察角度的求解能力（可得出解之**空白处集合**）是不同的，大约如下图所示：
 
@@ -379,65 +367,77 @@ _[此图进一步解释](#补充说明)_
 
 因此用越多角度来观察越有机会降低试错的次数，但这也造成一定的 overhead，具体哪种解法比较快因数独难度而异。
 
-解法五中，我们从行、列、宫、格四种角度寻解。新增三种角度寻找的过程与以格的角度（参考解法三）类似，于是写了 ~~乱乱的~~ macro。
+解法五中，我们从行、列、宫、格四种角度寻解。新增三种角度寻找的过程与以格的角度（参考解法三）类似，于是写成 ~~乱乱的~~ macro。
 
 ```c++
-#define FILL_IF_EXACTLY_ONE(LOOP1, LOOP2, arg1, arg2, \
-        arg3, arg4, count_unsolved, extra_stmt) \
+#define FOR_3(k, start) for (int kk = start, k = kk; k < kk+3; ++k)
+#define FOR_R_C_IN_BOX(r, c, i) FOR_3(r, get_r(i)) FOR_3(c, get_c(i))
+
+#define FILL_IF_EXACTLY_ONE(LOOP1, LOOP2, save_tmp, sudoku_fill_stmt) \
     do { \
         LOOP1 { \
             int num_can_fill = 0; \
-            int t; \
             LOOP2 { \
                 if (sudoku_can_fill(thiz, r, c, n)) { \
                     num_can_fill++; \
-                    t = arg4; \
-                    extra_stmt; \
+                    save_tmp; \
                     if (num_can_fill > 1) /* pruning */ \
                         break; \
                 } \
             } \
             if (num_can_fill == 0) \
-                return false; /* thiz can't be solved */ \
+                return false; \
             if (num_can_fill == 1) { \
-                sudoku_fill(thiz, arg1, arg2, arg3); \
+                sudoku_fill_stmt; \
                 ++*num_filled; \
             } else if (count_unsolved) \
                 ++*num_unsolved; \
         } \
-    } while (0) 
+        return true; \
+    } while (0)
 
 bool sudoku_solve_row(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
 {
-    FILL_IF_EXACTLY_ONE(FOR_N(r) FOR_EACH_NUM(n) if(!thiz->row[r][n]), 
-            FOR_N(c) if(!thiz->grid[r][c]), 
-            r, t, n, c, count_unsolved, NULL);
-    return true;
+    int cc;
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(r) FOR_EACH_NUM(n) if(!thiz->row[r][n]),
+        FOR_N(c) if(!thiz->grid[r][c]),
+        cc = c,
+        sudoku_fill(thiz, r, cc, n)
+    );
 }
 
 bool sudoku_solve_col(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
 {
-    FILL_IF_EXACTLY_ONE(FOR_N(c) FOR_EACH_NUM(n) if(!thiz->col[c][n]), 
-            FOR_N(r) if(!thiz->grid[r][c]), 
-            t, c, n, r, count_unsolved, NULL);
-    return true;
+    int rr;
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(c) FOR_EACH_NUM(n) if(!thiz->col[c][n]),
+        FOR_N(r) if(!thiz->grid[r][c]),
+        rr = r,
+        sudoku_fill(thiz, rr, c, n)
+    );
 }
 
 bool sudoku_solve_box(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
 {
-    int t2 = 0;
-    FILL_IF_EXACTLY_ONE(FOR_N(i) FOR_EACH_NUM(n) if(!thiz->box[i][n]), 
-            FOR_R_C_IN_BOX(r, c, i) if(!thiz->grid[r][c]), 
-            t, t2, n, r, count_unsolved, t2=c);
-    return true;
+    int rr, cc;
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(i) FOR_EACH_NUM(n) if(!thiz->box[i][n]),
+        FOR_R_C_IN_BOX(r, c, i) if(!thiz->grid[r][c]),
+        rr = r; cc = c,
+        sudoku_fill(thiz, rr, cc, n)
+    );
 }
 
 bool sudoku_solve_cell(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
 {
-    FILL_IF_EXACTLY_ONE(FOR_FOR_EACH_EMPTY_CELL(r, c, thiz), 
-            FOR_EACH_NUM(n), 
-            r, c, t, n, count_unsolved, NULL);
-    return true;
+    int nn;
+    FILL_IF_EXACTLY_ONE(
+        FOR_FOR_EACH_EMPTY_CELL(r, c, thiz),
+        FOR_EACH_NUM(n),
+        nn = n,
+        sudoku_fill(thiz, r, c, nn)
+    );
 }
 
 void sudoku_solve(Sudoku *thiz)
@@ -463,14 +463,11 @@ void sudoku_solve(Sudoku *thiz)
         FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
             FOR_EACH_NUM(n) {
                 if (sudoku_can_fill(thiz, r, c, n)) {
-                    sudoku_fill(thiz, r, c, n);
-
-                    // copy and solve
                     Sudoku sudoku_tmp;
                     memcpy(&sudoku_tmp, thiz, sizeof(Sudoku));
-                    sudoku_solve(&sudoku_tmp);
 
-                    sudoku_erase(thiz, r, c, n);
+                    sudoku_fill(&sudoku_tmp, r, c, n);
+                    sudoku_solve(&sudoku_tmp);
                 }
             }
             return;
@@ -479,8 +476,6 @@ void sudoku_solve(Sudoku *thiz)
 }
 ```
 *[Why use apparently meaningless do-while statements in macros](https://stackoverflow.com/questions/154136/why-use-apparently-meaningless-do-while-and-if-else-statements-in-macros)*
-
-> 觉得这里为了 [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) 写得有点乱，尤其 box 角度需要在 for 里存两个资讯（其他三种只需要一个），用了 `extra_stmt`(11行) 和 `t2=c`(47行) 乱解，盼望有缘人来指点（（
 
 再次强调，上述四种观察角度，单用任何一种或是混合使用都可以在有限时间内求解简单数独。
 
@@ -511,29 +506,298 @@ void sudoku_solve(Sudoku *thiz)
         // try to fill and solve it
         FOR_EACH_NUM(n) {
             if (sudoku_can_fill(thiz, r_min, c_min, n)) {
-                sudoku_fill(thiz, r_min, c_min, n);
-
-                // copy and solve
                 Sudoku sudoku_tmp;
                 memcpy(&sudoku_tmp, thiz, sizeof(Sudoku));
+                
+                sudoku_fill(&sudoku_tmp, r_min, c_min, n);
                 sudoku_solve(&sudoku_tmp);
-
-                sudoku_erase(thiz, r_min, c_min, n);
             }
         }
+```
+
+## 解法七： 格格加速
+
+检查某数是否可以填入某格虽然已经做到 O(1)，但寻解时要确定某格是否只能填入一个数字，目前还是需要逐个数字检查，时间为 O(n)。
+与 解法二 的优化同理，某格可填数的个数只会在所在之行、列、宫有更动时才会改变。因此我们同样可以再储存这些资讯来避免每次重新计算。
+
+```c++
+typedef struct _Sudoku {
+    int grid[N][N];
+    bool row[N][N+1];
+    bool col[N][N+1];
+    bool box[N][N+1];
+    bool can_fill[N][N][N+1];
+    int num_can_fill_cell[N][N];
+} Sudoku;
+```
+_`can_fill[r][c][n]` 表示第 `r` row 第 `c` col 是否可填入数字 `n`_  
+_`num_can_fill_cell[r][c]` 表示第 `r` row 第 `c` col 可填数字个数_
+
+这样一来，确定某格可填数个数的过程也变 O(1) 了！
+
+```c++
+bool sudoku_solve_cell(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
+{
+    FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
+        if (thiz->num_can_fill_cell[r][c] == 1) {
+            FOR_EACH_NUM(n) {
+                if (sudoku_can_fill(thiz, r, c, n)) {
+                    sudoku_fill(thiz, r, c, n);
+                    ++*num_filled;
+                    break;
+                }
+            }
+        } else if (thiz->num_can_fill_cell[r][c] == 0) {
+            return false; // pruning
+        } else if (count_unsolved) {
+            ++*num_unsolved;
+        }
+    }
+    return true;
+}
+```
+
+平时确定某数是否可填入某格也能稍稍加速，
+
+```c++
+bool sudoku_can_fill(Sudoku *thiz, int r, int c, int n)
+{
+    return thiz->can_fill[r][c][n];
+}
+```
+
+但原本的版本还是有必要存在的（真正具有判断能力，更新 `thiz->can_fill` 时需要）
+
+```c++
+bool sudoku_can_fill_2(Sudoku *thiz, int r, int c, int n)
+{
+    return !thiz->row[r][n] && !thiz->col[c][n] && !thiz->box[get_box(r,c)][n];
+}
+```
+
+更动某格会影响所在之行、列、宫的状态
+从这里也可以看出，为了实时更新可填状态，更动某格所需时间从原本的 O(1) 变成 O(n) 了，但大部分情况下搜索的次数远大于更动的次数，所以这代价还是值得的
+
+```c++
+bool sudoku_maybe_update_can_fill(Sudoku *thiz, int r, int c, int n, bool fill)
+{
+    if (fill) {
+        if (thiz->can_fill[r][c][n] == true) {
+            thiz->can_fill[r][c][n] = false;
+            thiz->num_can_fill_cell[r][c]--;
+        }
+    } else {
+        if (thiz->can_fill[r][c][n] == false &&
+                sudoku_can_fill_2(thiz, r, c, n)) {
+            thiz->can_fill[r][c][n] = true;
+            thiz->num_can_fill_cell[r][c]++;
+        }
+    }
+}
+
+void do_sudoku_fill(Sudoku *thiz, int r, int c, int n, bool fill)
+{
+    const int box_index = get_box(r, c);
+    thiz->row[r][n] = fill;
+    thiz->col[c][n] = fill;
+    thiz->box[box_index][n] = fill;
+    thiz->grid[r][c] = fill ? n : 0;
+
+    FOR_N(rr) {
+        sudoku_maybe_update_can_fill(thiz, rr, c, n, fill);
+    }
+    FOR_N(cc) {
+        sudoku_maybe_update_can_fill(thiz, r, cc, n, fill);
+    }
+    FOR_R_C_IN_BOX(rr, cc, box_index) {
+        sudoku_maybe_update_can_fill(thiz, rr, cc, n, fill);
+    }
+}
+```
+
+解法六的优化过程也可以简化为
+
+```c
+FOR_FOR_EACH_EMPTY_CELL(r, c, thiz) {
+    if (thiz->num_can_fill_cell[r][c] < Min) {
+        Min = thiz->num_can_fill_cell[r][c];
+        r_min = r;
+        c_min = c;
+    }       
+}
+```
+
+## 解法八： 全面加速
+
+解法七中对**格**的优化同样适用于其他三种角度中
+我想到此为止大概是 array 能做到的极限了吧(?)
+
+```c++
+typedef struct _Sudoku {
+    int grid[N][N];
+    bool row[N][N+1];
+    bool col[N][N+1];
+    bool box[N][N+1];
+    bool can_fill[N][N][N+1];
+    int num_can_fill_row[N][N+1];
+    int num_can_fill_col[N][N+1];
+    int num_can_fill_box[N][N+1];
+    int num_can_fill_cell[N][N];
+} Sudoku;
+```
+
+_`num_can_fill_row[r][n]` 表示第 `r` row 有几个格子可填入数字 `n` ，以此类推_  
+
+四种角度搜索过程再次统一
+
+```c++
+#define FILL_IF_EXACTLY_ONE(LOOP1, LOOP2, num_can_fill) \
+    do { \
+        LOOP1 { \
+            if (num_can_fill == 1) { \
+                LOOP2 { \
+                    if (sudoku_can_fill(thiz, r, c, n)) { \
+                        sudoku_fill(thiz, r, c, n); \
+                        ++*num_filled; \
+                        break; \
+                    } \
+                } \
+            } else if (num_can_fill == 0) { \
+                return false; /* pruning */ \
+            } else if (count_unsolved) { \
+                ++*num_unsolved; \
+            } \
+        } \
+        return true; \
+    } while (0)
+
+bool sudoku_solve_row(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
+{
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(r) FOR_EACH_NUM(n) if(!thiz->row[r][n]),
+        FOR_N(c),
+        thiz->num_can_fill_row[r][n]
+    );
+}
+
+bool sudoku_solve_col(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
+{
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(c) FOR_EACH_NUM(n) if(!thiz->col[c][n]),
+        FOR_N(r),
+        thiz->num_can_fill_col[c][n]
+    );
+}
+
+bool sudoku_solve_box(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
+{
+    FILL_IF_EXACTLY_ONE(
+        FOR_N(i) FOR_EACH_NUM(n) if(!thiz->box[i][n]),
+        FOR_R_C_IN_BOX(r, c, i),
+        thiz->num_can_fill_box[i][n]
+    );
+}
+
+bool sudoku_solve_cell(Sudoku *thiz, int *num_filled, int *num_unsolved, bool count_unsolved)
+{
+    FILL_IF_EXACTLY_ONE(
+        FOR_FOR_EACH_EMPTY_CELL(r, c, thiz),
+        FOR_EACH_NUM(n),
+        thiz->num_can_fill_cell[r][c]
+    );
+}
+```
+
+更新步骤新增了 `FOR_EACH_NUM` 的 update，原因是在这之前都不重视已填格子的资讯，但在这版本中已填格子的资讯也变得重要了（某格填入某数后，需要把该格原本的其他可填数设为不可填，因为这会影响该数在该行、列、宫的可填格子个数，反之亦然）
+
+```c++
+void sudoku_maybe_update_can_fill(Sudoku *thiz, int r, int c, int n, bool fill)
+{
+    if (fill) {
+        if (thiz->can_fill[r][c][n]) {
+            thiz->can_fill[r][c][n] = false;
+            thiz->num_can_fill_cell[r][c]--;
+            thiz->num_can_fill_row[r][n]--;
+            thiz->num_can_fill_col[c][n]--;
+            thiz->num_can_fill_box[get_box(r, c)][n]--;
+        }
+    } else {
+        if (!thiz->can_fill[r][c][n]
+            && sudoku_can_fill_2(thiz, r, c, n)) {
+            thiz->can_fill[r][c][n] = true;
+            thiz->num_can_fill_cell[r][c]++;
+            thiz->num_can_fill_row[r][n]++;
+            thiz->num_can_fill_col[c][n]++;
+            thiz->num_can_fill_box[get_box(r, c)][n]++;
+        }
+    }
+}
+
+void do_sudoku_fill(Sudoku *thiz, int r, int c, int n, bool fill)
+{
+    thiz->grid[r][c] = fill ? n : 0;
+
+    const int box_index = get_box(r, c);
+    thiz->row[r][n] = fill;
+    thiz->col[c][n] = fill;
+    thiz->box[box_index][n] = fill;
+
+    FOR_N(rr) {
+        sudoku_maybe_update_can_fill(thiz, rr, c, n, fill);
+    }
+    FOR_N(cc) {
+        sudoku_maybe_update_can_fill(thiz, r, cc, n, fill);
+    }
+    FOR_R_C_IN_BOX(rr, cc, box_index) {
+        sudoku_maybe_update_can_fill(thiz, rr, cc, n, fill);
+    }
+    FOR_EACH_NUM(nn) {
+        sudoku_maybe_update_can_fill(thiz, r, c, nn, fill);
+    }
+}
+```
+
+同样因为这里在意已填格子的状态，需要完善是否可填的定义（检查格子是否为空）
+
+```c++
+bool sudoku_can_fill_2(Sudoku *thiz, int r, int c, int n)
+{
+    return !thiz->grid[r][c] && !thiz->row[r][n] && 
+            !thiz->col[c][n] && !thiz->box[get_box(r,c)][n];
+}
+```
+
+最后附上初始化过程
+
+```c++
+void sudoku_init(Sudoku *thiz)
+{
+    memset(thiz, 0, sizeof(Sudoku));
+    memset(thiz->can_fill, true, sizeof(thiz->can_fill));
+    FOR_N(i) {
+        FOR_N(j) {
+            thiz->num_can_fill_cell[i][j] = N;
+        }
+        FOR_EACH_NUM(n) {
+            thiz->num_can_fill_row[i][n] = N;
+            thiz->num_can_fill_col[i][n] = N;
+            thiz->num_can_fill_box[i][n] = N;
+        }
+    }
+}
 ```
 
 ## 效能分析
 
 #### 方法
 
-每次执行 100×n 回，去除较大较小取其中 60 轮的时间计算平均。（n 随各题计算时间长短做调整，少则1，多则1000）
+每次执行 100×n 次，去除较大较小取其中 60 轮的时间计算平均。（n 随各题计算时间长短做调整，约 1 至 1000 不等）
 
 #### 测资描述
 + easy: 简单
 + easy_3_ans: 多解
 + medium: 中等
-+ [hardest](https://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html): 号称最难数独，据说是数学家用三个月设计出来的？ ~~(不过找一找发现好像有两个版本)~~
++ [hardest](https://www.telegraph.co.uk/news/science/science-news/9359579/Worlds-hardest-sudoku-can-you-crack-it.html): 号称最难数独，据说是数学家用三个月设计出来的？ ~~不过找一找发现好像有两个版本？~~
 + hardest_no_ans: 在上题某空白处填入错误解
 
 | easy || easy_3_ans |
@@ -544,26 +808,34 @@ void sudoku_solve(Sudoku *thiz)
 |![](/img/in-post/sudoku/hardest_no_ans.png)|||
 
 
-
-
-
-
-
-
 #### 结果
 
 ![](/img/in-post/sudoku/result_easy.png)
 
-解法二
+解法二和三的优化基本上没 overhead，因此再简单的数独都有明显优化效果
 
 ![](/img/in-post/sudoku/result_easy_3_ans.png)
 
+这题更明显地表现出其他解法的 overhead
+
 ![](/img/in-post/sudoku/result_medium.png)
+
+难度稍微提升后差距就明显拉开了
+解法四是空间上的优化，不会带来加速
+解法六的加速有概率性+少许 overhead，稍微变慢属正常
+这题最快的解法八比传统的解法一快了约930倍！
 
 ![](/img/in-post/sudoku/result_hardest_no_ans.png)
 
+难度提升表示试错次数变多，概率性加速的解法六终于得到充分发挥比解法五快了一倍左右
+
 ![](/img/in-post/sudoku/result_hardest.png)
 
+还有最具代表性的数独题
+
+最后是整体时间
+
+![](/img/in-post/sudoku/result_all.png)
 
 ## 补充说明
 

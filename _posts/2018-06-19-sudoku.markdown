@@ -65,9 +65,9 @@ void bt(int r, int c)
 
 // call bt(0, 0) to solve
 ```
-*`next_bt(r, c)`由左至右，由上而下,依序进行试错*
-*`bt(r, c)`对数独的第`r`row, 第`c`col试错*
->原本看到`next_bt(r, c)`这种只有一两行的 funcion 想说加上 [inline](http://en.cppreference.com/w/cpp/language/inline) 减少 call function 的 overhead 来加快速度，实测上也确实有微小的加速，但 GNU 自带的 [optimization flag](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) 增快的幅度会是以倍数来计算的，而加上 inline 的优化后反而慢了一点……所以如果可以自行 compile 或许就不用考虑用 inline 来加速吧。
+*`next_bt(r, c)` 由左至右，由上而下,依序进行试错*
+*`bt(r, c)` 对数独的第 `r` row, 第 `c` col试错*
+>原本看到 `next_bt(r, c)` 这种只有一两行的 funcion 想说加上 [inline](http://en.cppreference.com/w/cpp/language/inline) 减少 call function 的 overhead 来加快速度，实测上也确实有微小的加速，但 GNU 自带的 [optimization flag](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) 增快的幅度会是以倍数来计算的，而加上 inline 的优化后反而慢了一点……所以如果可以自行 compile 或许就不用考虑用 inline 来加速吧。
 
 ```c++
 bool can_fill_row(int r, int n)
@@ -102,9 +102,9 @@ bool can_fill(int r, int c, int n)
     return can_fill_row(r, n) && can_fill_col(c, n) && can_fill_box(r, c, n);
 }
 ```
-*`can_fill_row(r, n)`寻找第 `r` row是否已存在数字`n`，以此类推。*
-*`box`表示数独中的宫 (小 3x3)。*
-*第 19 行`r_start = r/3 * 3`取得`r`所在之宫的 row 起始位置，`c_start` 同理。*
+*`can_fill_row(r, n)`寻找第 `r` row是否已存在数字 `n`，以此类推。*
+*`box` 表示数独中的宫 (小 3x3)。*
+*第 19 行 `r_start = r/3 * 3` 取得 `r` 所在之宫的 row 起始位置，`c_start` 同理。*
 
 
 ## 解法二： 优化版 Backtracking
@@ -128,9 +128,9 @@ bool can_fill(int r, int c, int n)
     return !row[r][n] && !col[c][n] && !box[get_box(r,c)][n];
 }
 ```
-*`get_box(r, c)`找到`r, c`对应的`box`编号。编号由左至右，由上而下，依序为 0-8。其对应关系通过尝试几组`r, c`不难发觉。*
+*`get_box(r, c)` 找到 `r, c` 对应的 `box` 编号。编号由左至右，由上而下，依序为 0-8。其对应关系通过尝试几组 `r, c` 不难发觉。*
 
-于是，原本 O(n) 的`can_fill(r, c, n)`就可以在 O(1) 时间内完成了！~~（虽然原本的 O(n) 的 n 也只是 9）~~
+于是，原本 O(n) 的 `can_fill(r, c, n)` 就可以在 O(1) 时间内完成了！~~（虽然原本的 O(n) 的 n 也只是 9）~~
 [Big O notation](https://en.wikipedia.org/wiki/Big_O_notation)
 
 更改数独时同步更新变数
@@ -261,7 +261,7 @@ void sudoku_solve(Sudoku *thiz)
     }
 }
 ```
-*小 function 们都与之前的类似，只是新增对哪个 sudoku 做操作。比如`sudoku_can_fill(thiz, r, c, n)`和`can_fill(r, c, n)`， 前者表示针对数独`thiz`检查位置`r, c`能否填入`n`。*
+*小 function 们都与之前的类似，只是新增对哪个 sudoku 做操作。比如 `sudoku_can_fill(thiz, r, c, n)` 和 `can_fill(r, c, n)` ， 前者表示针对数独 `thiz` 检查位置 `r, c` 能否填入 `n` 。*
 
 其中
 
@@ -345,7 +345,7 @@ void sudoku_solve(Sudoku *thiz, bool record=false)
     }
 }
 ```
-*`record`default 为 `false` 是因为第一次不用记录（所有答案都是确定正确的）*
+*`record` default 为 `false` 是因为第一次不用记录（所有答案都是确定正确的）*
 *可以发现第 40 行处不需要像 解法三 一样复制整个数独了*
 >原本想说这部分只写成一个 function（感觉比较完整？），但 `do_sudoku_solve` 共有三个有可能 return 的地方(19、44、47行)，不知若要在 return 前把 stack 里记录的数字 `erase` 掉，是要利用 goto 好呢，还是像这样拆成两个 function 呢？又或是有其它解法呢？
 

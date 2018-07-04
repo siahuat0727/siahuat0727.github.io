@@ -16,11 +16,11 @@ tags:
 
 ## 前言
 
-解数独是刚接触程式时的第一份作业，当时有很多想法但都写不太出来，也找不太到相关想法的实作（大概还不会 google 吧），于是以它作为写 blog 的开始。
+解数独是刚接触程式时的第一份作业，当时有很多想法但都写不太出来，也找不太到相关想法的实作（大概还不会 google 吧），于是以数独作为写 blog 的开始。
 这或许不是最好的入门教学但我想应该是最啰嗦的（
-另外，非常欢迎路过的有缘人提出建议啦～无论变数命名、设计或是这篇文的定位，任何东西都欢迎提噢！
+另外，非常欢迎路过的有缘人提出建议啦～无论变数命名、设计或是内容，任何东西都欢迎提噢！
 
-[Github repo 完整 code](https://github.com/siahuat0727/sudoku)
+[完整 code (Github repo)](https://github.com/siahuat0727/sudoku)
 
 ## 解法一： 传统 Backtracking
 
@@ -787,6 +787,8 @@ void sudoku_init(Sudoku *thiz)
 }
 ```
 
+[完整 code (Github repo)](https://github.com/siahuat0727/sudoku)
+
 ## 效能分析
 
 #### 方法
@@ -810,28 +812,28 @@ void sudoku_init(Sudoku *thiz)
 
 #### 结果
 
-![](/img/in-post/sudoku/result_easy.png)
-
 解法二和三的优化基本上没 overhead，因此再简单的数独都有明显优化效果
 
-![](/img/in-post/sudoku/result_easy_3_ans.png)
+![](/img/in-post/sudoku/result_easy.png)
 
 这题更明显地表现出其他解法的 overhead
 
-![](/img/in-post/sudoku/result_medium.png)
+![](/img/in-post/sudoku/result_easy_3_ans.png)
 
 难度稍微提升后差距就明显拉开了
 解法四是空间上的优化，不会带来加速
 解法六的加速有概率性+少许 overhead，稍微变慢属正常
 这题最快的解法八比传统的解法一快了约930倍！
 
-![](/img/in-post/sudoku/result_hardest_no_ans.png)
+![](/img/in-post/sudoku/result_medium.png)
 
 难度提升表示试错次数变多，概率性加速的解法六终于得到充分发挥比解法五快了一倍左右
 
-![](/img/in-post/sudoku/result_hardest.png)
+![](/img/in-post/sudoku/result_hardest_no_ans.png)
 
 还有最具代表性的数独题
+
+![](/img/in-post/sudoku/result_hardest.png)
 
 最后是整体时间
 

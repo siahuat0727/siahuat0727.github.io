@@ -11,8 +11,8 @@ github_repo: "https://github.com/siahuat0727/siahuat0727.github.io.git" # you co
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "...ing"
-# sidebar-avatar: /img/xx.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "佛系青年，更新随缘"
+sidebar-avatar: /img/profile.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # SNS settings
 RSS: false

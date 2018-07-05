@@ -840,9 +840,9 @@ void sudoku_init(Sudoku *thiz)
 
 ## 结语
 
-Array 版解法到此告一段落，有任何问题欢迎在下面留言噢！
+Array 版解法到此告一段落，如有任何问题欢迎在下面留言噢！
 如果觉得这篇文对你有帮助，可以到我的 [Github repo](https://github.com/siahuat0727/sudoku) 点个 star ～
-你的小小举动会带来大大动力噢！
+你的小小举动会给我大大的鼓励噢！
 
 ## 补充说明
 

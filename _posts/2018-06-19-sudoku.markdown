@@ -5,13 +5,9 @@ author: "siahuat0727"
 catalog: true
 tags:
     - sudoku
-    - 数独
-    - 设计
-    - 实作
-    - 优化
-    - 分析
-    - 拟人
-    - C
+    - 数独优化
+    - 数独分析
+    - 数独拟人
 ---
 
 ## 前言

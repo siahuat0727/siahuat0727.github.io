@@ -68,16 +68,16 @@ $b_0\ b_1\ b_2\ b_3\ b_4\ b_5\ b_6\ b_7$
 
 
 $\begin{matrix}
-\small\color{forestgreen}{+7}  & \small\color{forestgreen}{+5}  & \small\color{forestgreen}{+3}  & \small\color{forestgreen}{+1}  & \small\color{forestgreen}{-1}  & \small\color{forestgreen}{-3}  & \small\color{forestgreen}{-5}  & \small\color{forestgreen}{-7}  \\
+\small\color{forestgreen}{+7}  & \small\color{forestgreen}{+5}  & \small\color{forestgreen}{+3}  & \small\color{forestgreen}{+1}  & \small\color{forestgreen}{-1}  & \small\color{forestgreen}{-3}  & \small\color{forestgreen}{-5}  & \small\color{forestgreen}{-7}  \\\
 b_7 & b_6 & b_5 & b_4 & b_3 & b_2 & b_1 & b_0
 \end{matrix}$
 
 分解目标距离：
 
 $\begin{matrix}
-\tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}\\
-\tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{-2}\\
-\tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}\\
+\tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}\\\
+\tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{forestgreen}{-2}\\\
+\tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}  & \tiny\color{forestgreen}{+1}  & \tiny\color{forestgreen}{-1}\\\
 b_7 & b_6 & b_5 & b_4 & b_3 & b_2 & b_1 & b_0
 \end{matrix}$
 
@@ -86,52 +86,52 @@ b_7 & b_6 & b_5 & b_4 & b_3 & b_2 & b_1 & b_0
 
 
 $\begin{matrix}
-\tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}\\
-\tiny\color{forestgreen}{+2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{-2}\\
-\small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}\\
+\tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}\\\
+\tiny\color{forestgreen}{+2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{-2}\\\
+\small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}  & \small\color{forestgreen}{+1}  & \small\color{red}{-1}\\\
 \color{forestgreen}{b_7} & \color{red}{b_6} & \color{forestgreen}{b_5} & \color{red}{b_4} & \color{forestgreen}{b_3} & \color{red}{b_2} & \color{forestgreen}{b_1} & \color{red}{b_0}
 \end{matrix}$
 
-$\small\color{forestgreen}{+1}$ mask：$10101010_2 \Rightarrow AA_{16}$
-$\small\color{red}{-1}$ mask：$01010101_2 \Rightarrow 55_{16}$
+$$\small\color{forestgreen}{+1}$$ mask：$$10101010_2 \Rightarrow AA_{16}$$
+$$\small\color{red}{-1}$$ mask：$$01010101_2 \Rightarrow 55_{16}$$
 
 
 
 经过 `b = (b & 0xAA) >> 1 | (b & 0x55) << 1` ：
 
 $\begin{matrix}
-\tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}\\
-\tiny\color{red}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{-2}\\
+\tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}\\\
+\tiny\color{red}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{-2}  & \tiny\color{red}{+2}  & \tiny\color{forestgreen}{+2}  & \tiny\color{red}{-2}  & \tiny\color{forestgreen}{-2}\\\
 \color{red}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_4} & \color{forestgreen}{b_5} & \color{red}{b_2} & \color{forestgreen}{b_3} & \color{red}{b_0} & \color{forestgreen}{b_1}
 \end{matrix}$
 
 #### 第二次位移：
 
 $\begin{matrix}
-\tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{red}{-4}\\
-\small\color{forestgreen}{+2}  & \small\color{forestgreen}{+2}  & \small\color{red}{-2}  & \small\color{red}{-2}  & \small\color{forestgreen}{+2}  & \small\color{forestgreen}{+2}  & \small\color{red}{-2}  & \small\color{red}{-2}\\
+\tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{red}{-4}\\\
+\small\color{forestgreen}{+2}  & \small\color{forestgreen}{+2}  & \small\color{red}{-2}  & \small\color{red}{-2}  & \small\color{forestgreen}{+2}  & \small\color{forestgreen}{+2}  & \small\color{red}{-2}  & \small\color{red}{-2}\\\
 \color{forestgreen}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_4} & \color{red}{b_5} & \color{forestgreen}{b_2} & \color{forestgreen}{b_3} & \color{red}{b_0} & \color{red}{b_1}
 \end{matrix}$
 
-$\small\color{forestgreen}{+2}$ mask：$11001100_2 \Rightarrow CC_{16}$
-$\small\color{red}{-2}$ mask：$00110011_2 \Rightarrow 33_{16}$
+$$\small\color{forestgreen}{+2}$$ mask：$$11001100_2 \Rightarrow CC_{16}$$
+$$\small\color{red}{-2}$$ mask：$$00110011_2 \Rightarrow 33_{16}$$
 
 经过 `b = (b & 0xCC) >> 2 | (b & 0x33) << 2` ：
 
 $\begin{matrix}
-\tiny\color{red}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}\\
+\tiny\color{red}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{-4}  & \tiny\color{red}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}\\\
 \color{red}{b_4} & \color{red}{b_5} & \color{forestgreen}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_0} & \color{red}{b_1} & \color{forestgreen}{b_2} & \color{forestgreen}{b_3}
 \end{matrix}$
 
 #### 第三次位移：
 
 $\begin{matrix}
-\small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}\\
+\small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}\\\
 \color{forestgreen}{b_4} & \color{forestgreen}{b_5} & \color{forestgreen}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_0} & \color{red}{b_1} & \color{red}{b_2} & \color{red}{b_3}
 \end{matrix}$
 
-$\small\color{forestgreen}{+4}$ mask：$11110000_2 \Rightarrow F0_{16}$
-$\small\color{red}{-4}$ mask：$00001111_2 \Rightarrow 0F_{16}$
+$$\small\color{forestgreen}{+4}$$ mask：$$11110000_2 \Rightarrow F0_{16}$$
+$$\small\color{red}{-4}$$ mask：$$00001111_2 \Rightarrow 0F_{16}$$
 
 经过 `b = (b & 0xF0) >> 4 | (b & 0x0F) << 4` ：
 
@@ -164,10 +164,10 @@ eg. $1111101111001111_2 \Rightarrow 111111011011101_2$
 
 图解：
 $\begin{matrix}
-b_F & b_E & b_D & b_C &             & b_3 & b_7 & b_B & b_F  \\
-b_B & b_A & b_9 & b_8 & \Rightarrow & b_2 & b_6 & b_A & b_E  \\
-b_7 & b_6 & b_5 & b_4 &             & b_1 & b_5 & b_9 & b_D  \\
-b_3 & b_2 & b_1 & b_0 &             & b_0 & b_4 & b_8 & b_C  \\
+b_F & b_E & b_D & b_C &             & b_3 & b_7 & b_B & b_F  \\\
+b_B & b_A & b_9 & b_8 & \Rightarrow & b_2 & b_6 & b_A & b_E  \\\
+b_7 & b_6 & b_5 & b_4 &             & b_1 & b_5 & b_9 & b_D  \\\
+b_3 & b_2 & b_1 & b_0 &             & b_0 & b_4 & b_8 & b_C  \\\
 \end{matrix}$
 
 
@@ -175,115 +175,115 @@ b_3 & b_2 & b_1 & b_0 &             & b_0 & b_4 & b_8 & b_C  \\
 观察其目标距离：
 
 $\begin{matrix}
-\small\color{forestgreen}{+3}  &             & \small\color{forestgreen}{+6}  & & \small\color{forestgreen}{+9}  &             & \small\color{forestgreen}{+12}\\
-{b_F} & & {b_E} & & {b_D} & & {b_C} \\
-\\
-\small\color{forestgreen}{-2}  &             & \small\color{forestgreen}{+1}  & & \small\color{forestgreen}{+4}  &             & \small\color{forestgreen}{+7}\\
-{b_B} & & {b_A} & & {b_9} & & {b_8} \\
-\\
-\small\color{forestgreen}{-7}  &             & \small\color{forestgreen}{-4}  & & \small\color{forestgreen}{-1}  &             & \small\color{forestgreen}{+2}\\
-{b_7} & & {b_6} & & {b_5} & & {b_4} \\
-\\
-\small\color{forestgreen}{-12}  &             & \small\color{forestgreen}{-9}  & & \small\color{forestgreen}{-6}  &             & \small\color{forestgreen}{-3}\\
-{b_3} & & {b_2} & & {b_1} & & {b_0} \\
+\small\color{forestgreen}{+3}  &             & \small\color{forestgreen}{+6}  & & \small\color{forestgreen}{+9}  &             & \small\color{forestgreen}{+12}\\\
+{b_F} & & {b_E} & & {b_D} & & {b_C} \\\
+\\\
+\small\color{forestgreen}{-2}  &             & \small\color{forestgreen}{+1}  & & \small\color{forestgreen}{+4}  &             & \small\color{forestgreen}{+7}\\\
+{b_B} & & {b_A} & & {b_9} & & {b_8} \\\
+\\\
+\small\color{forestgreen}{-7}  &             & \small\color{forestgreen}{-4}  & & \small\color{forestgreen}{-1}  &             & \small\color{forestgreen}{+2}\\\
+{b_7} & & {b_6} & & {b_5} & & {b_4} \\\
+\\\
+\small\color{forestgreen}{-12}  &             & \small\color{forestgreen}{-9}  & & \small\color{forestgreen}{-6}  &             & \small\color{forestgreen}{-3}\\\
+{b_3} & & {b_2} & & {b_1} & & {b_0} \\\
 \end{matrix}$
 
 分解目标距离：（由上分解过程可以得出此分解结果）
 
 $\begin{matrix}
-\tiny\color{forestgreen}{+2}  &             & \tiny\color{forestgreen}{+2}  & & \tiny\color{forestgreen}{+8}  &             & \tiny\color{forestgreen}{+8}\\
-\tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}  & & \tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}\\
-{b_F} & & {b_E} & & {b_D} & & {b_C} \\
-\\
-\tiny\color{forestgreen}{+2} & & \tiny\color{forestgreen}{+2}  & & \tiny\color{forestgreen}{+8} & & \tiny\color{forestgreen}{+8} & \\
-\tiny\color{forestgreen}{-1} & & \tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}  & & \tiny\color{forestgreen}{-4}  \\
-{b_B} & & {b_A} & & {b_9} & & {b_8} \\
-\\
-\tiny\color{forestgreen}{-8}  &             & \tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-2}  &             & \tiny\color{forestgreen}{-2}\\
-\tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}  & & \tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}\\
-{b_7} & & {b_6} & & {b_5} & & {b_4} \\
-\\
-\tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-2}  & & \tiny\color{forestgreen}{-2}\\
-\tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}  & & \tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}\\
-{b_3} & & {b_2} & & {b_1} & & {b_0} \\
+\tiny\color{forestgreen}{+2}  &             & \tiny\color{forestgreen}{+2}  & & \tiny\color{forestgreen}{+8}  &             & \tiny\color{forestgreen}{+8}\\\
+\tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}  & & \tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}\\\
+{b_F} & & {b_E} & & {b_D} & & {b_C} \\\
+\\\
+\tiny\color{forestgreen}{+2} & & \tiny\color{forestgreen}{+2}  & & \tiny\color{forestgreen}{+8} & & \tiny\color{forestgreen}{+8} & \\\
+\tiny\color{forestgreen}{-1} & & \tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}  & & \tiny\color{forestgreen}{-4}  \\\
+{b_B} & & {b_A} & & {b_9} & & {b_8} \\\
+\\\
+\tiny\color{forestgreen}{-8}  &             & \tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-2}  &             & \tiny\color{forestgreen}{-2}\\\
+\tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}  & & \tiny\color{forestgreen}{+1}  &             & \tiny\color{forestgreen}{+4}\\\
+{b_7} & & {b_6} & & {b_5} & & {b_4} \\\
+\\\
+\tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-2}  & & \tiny\color{forestgreen}{-2}\\\
+\tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}  & & \tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}\\\
+{b_3} & & {b_2} & & {b_1} & & {b_0} \\\
 \end{matrix}$
 
 #### 第一次位移：
 
 $\begin{matrix}
-\tiny\color{forestgreen}{+2}  &             & \tiny\color{red}{+2}  & & & \tiny\color{forestgreen}{+8}  &             & \tiny\color{red}{+8}\\
-\small\color{forestgreen}{+1}  &             & \small\color{red}{+4}  & & & \small\color{forestgreen}{+1}  &             & \small\color{red}{+4}\\
-\color{forestgreen}{b_F} & \rightarrow & \color{red}{b_E} & & & \color{forestgreen}{b_D} & \rightarrow & \color{red}{b_C} \\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\
-\tiny\color{orange}{+2}  &             & \tiny\color{blue}{+2}  & & & \tiny\color{orange}{+8}  &             & \tiny\color{blue}{+8}\\
-\small\color{orange}{-4}  &             & \small\color{blue}{-1}  & & & \small\color{orange}{-4}  &             & \small\color{blue}{-1}\\
-\color{orange}{b_B} & \leftarrow  & \color{blue}{b_A} & & & \color{orange}{b_9} & \leftarrow  & \color{blue}{b_8} \\
-\\
-\tiny\color{forestgreen}{-8}  &             & \tiny\color{red}{-8}  & & & \tiny\color{forestgreen}{-2}  &             & \tiny\color{red}{-2}\\
-\small\color{forestgreen}{+1}  &             & \small\color{red}{+4}  & & & \small\color{forestgreen}{+1}  &             & \small\color{red}{+4}\\
-\color{forestgreen}{b_7} & \rightarrow & \color{red}{b_6} & & & \color{forestgreen}{b_5} & \rightarrow & \color{red}{b_4} \\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\
-\tiny\color{orange}{-8}  &             & \tiny\color{blue}{-8}  & & & \tiny\color{orange}{-2}  &             & \tiny\color{blue}{-2}\\
-\small\color{orange}{-4}  &             & \small\color{blue}{-1}  & & & \small\color{orange}{-4}  &             & \small\color{blue}{-1}\\
-\color{orange}{b_3} & \leftarrow  & \color{blue}{b_2} & & & \color{orange}{b_1} & \leftarrow  & \color{blue}{b_0} \\
+\tiny\color{forestgreen}{+2}  &             & \tiny\color{red}{+2}  & & & \tiny\color{forestgreen}{+8}  &             & \tiny\color{red}{+8}\\\
+\small\color{forestgreen}{+1}  &             & \small\color{red}{+4}  & & & \small\color{forestgreen}{+1}  &             & \small\color{red}{+4}\\\
+\color{forestgreen}{b_F} & \rightarrow & \color{red}{b_E} & & & \color{forestgreen}{b_D} & \rightarrow & \color{red}{b_C} \\\
+\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
+\tiny\color{orange}{+2}  &             & \tiny\color{blue}{+2}  & & & \tiny\color{orange}{+8}  &             & \tiny\color{blue}{+8}\\\
+\small\color{orange}{-4}  &             & \small\color{blue}{-1}  & & & \small\color{orange}{-4}  &             & \small\color{blue}{-1}\\\
+\color{orange}{b_B} & \leftarrow  & \color{blue}{b_A} & & & \color{orange}{b_9} & \leftarrow  & \color{blue}{b_8} \\\
+\\\
+\tiny\color{forestgreen}{-8}  &             & \tiny\color{red}{-8}  & & & \tiny\color{forestgreen}{-2}  &             & \tiny\color{red}{-2}\\\
+\small\color{forestgreen}{+1}  &             & \small\color{red}{+4}  & & & \small\color{forestgreen}{+1}  &             & \small\color{red}{+4}\\\
+\color{forestgreen}{b_7} & \rightarrow & \color{red}{b_6} & & & \color{forestgreen}{b_5} & \rightarrow & \color{red}{b_4} \\\
+\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
+\tiny\color{orange}{-8}  &             & \tiny\color{blue}{-8}  & & & \tiny\color{orange}{-2}  &             & \tiny\color{blue}{-2}\\\
+\small\color{orange}{-4}  &             & \small\color{blue}{-1}  & & & \small\color{orange}{-4}  &             & \small\color{blue}{-1}\\\
+\color{orange}{b_3} & \leftarrow  & \color{blue}{b_2} & & & \color{orange}{b_1} & \leftarrow  & \color{blue}{b_0} \\\
 \end{matrix}$
 
-$\small\color{forestgreen}{+1}$ mask：$1010\_0000\_1010\_0000_2 \Rightarrow A0A0_{16}$
-$\small\color{red}{+4}$ mask：$0101\_0000\_0101\_0000_2 \Rightarrow 5050_{16}$
-$\small\color{orange}{-4}$ mask：$0000\_1010\_0000\_1010_2 \Rightarrow 0A0A_{16}$
-$\small\color{blue}{-1}$ mask：$0000\_0101\_0000\_0101_2 \Rightarrow 0505_{16}$
+$$\small\color{forestgreen}{+1}$$ mask：$$1010\_0000\_1010\_0000_2 \Rightarrow A0A0_{16}$$
+$$\small\color{red}{+4}$$ mask：$$0101\_0000\_0101\_0000_2 \Rightarrow 5050_{16}$$
+$$\small\color{orange}{-4}$$ mask：$$0000\_1010\_0000\_1010_2 \Rightarrow 0A0A_{16}$$
+$$\small\color{blue}{-1}$$ mask：$$0000\_0101\_0000\_0101_2 \Rightarrow 0505_{16}$$
 
 经过 `b = (b & 0xA0A0) >> 1 | (b & 0x5050) >> 4 | (b & 0x0A0A) << 4 | (b & 0x0505) << 1`：
 
 $\begin{matrix}
-\tiny\color{orange}{+2}  &             & \tiny\color{forestgreen}{+2}  & & & \tiny\color{orange}{+8}  &             & \tiny\color{forestgreen}{+8}\\
-\color{orange}{b_B} &             & \color{forestgreen}{b_F} & & & \color{orange}{b_9} &             & \color{forestgreen}{b_D} \\
-\\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\
+\tiny\color{orange}{+2}  &             & \tiny\color{forestgreen}{+2}  & & & \tiny\color{orange}{+8}  &             & \tiny\color{forestgreen}{+8}\\\
+\color{orange}{b_B} &             & \color{forestgreen}{b_F} & & & \color{orange}{b_9} &             & \color{forestgreen}{b_D} \\\
+\\\
+\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
 \tiny\color{blue}{+2}  &             & \tiny\color{red}{+2}  & & & \tiny
-\color{blue}{b_A} &             & \color{red}{b_E} & & & \color{blue}{b_8} &             & \color{red}{b_C} \\
-\\
-\tiny\color{orange}{-8}  &             & \tiny\color{forestgreen}{-8}  & & & \tiny\color{orange}{-2}  &             & \tiny\color{forestgreen}{-2}\\
-\color{orange}{b_3} &             & \color{forestgreen}{b_7} & & & \color{orange}{b_1} &             & \color{forestgreen}{b_5} \\
-\\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\
+\color{blue}{b_A} &             & \color{red}{b_E} & & & \color{blue}{b_8} &             & \color{red}{b_C} \\\
+\\\
+\tiny\color{orange}{-8}  &             & \tiny\color{forestgreen}{-8}  & & & \tiny\color{orange}{-2}  &             & \tiny\color{forestgreen}{-2}\\\
+\color{orange}{b_3} &             & \color{forestgreen}{b_7} & & & \color{orange}{b_1} &             & \color{forestgreen}{b_5} \\\
+\\\
+\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
 \tiny\color{blue}{-8}  &             & \tiny\color{red}{-8}  & & & \tiny
-\color{blue}{b_2} &             & \color{red}{b_6} & & & \color{blue}{b_0} &             & \color{red}{b_4} \\
+\color{blue}{b_2} &             & \color{red}{b_6} & & & \color{blue}{b_0} &             & \color{red}{b_4} \\\
 \end{matrix}$
 
 
 #### 第二次位移：
 
 $\begin{matrix}
-\small\color{forestgreen}{+2} & & \small\color{forestgreen}{+2} & & \small\color{red}{+8} & & \small\color{red}{+8}\\
-\color{green}{b_B} & & \color{green}{b_F} & & \color{red}{b_9} & & \color{red}{b_D} \\
- & & & \rightarrow\\
-\small\color{forestgreen}{+2} & & \small\color{forestgreen}{+2} & & \small\color{red}{+8} & & \small\color{red}{+8}\\
-\color{green}{b_A} & & \color{green}{b_E} & & \color{red}{b_8} & & \color{red}{b_C} \\
- & \uparrow & & & & \downarrow\\
-\small\color{orange}{-8} & & \small\color{orange}{-8} & & \small\color{blue}{-2} & & \small\color{blue}{-2}\\
-\color{orange}{b_3} & & \color{orange}{b_7} & & \color{blue}{b_1} & & \color{blue}{b_5} \\
- & & & \leftarrow\\
-\small\color{orange}{-8} & & \small\color{orange}{-8} & & \small\color{blue}{-2} & & \small\color{blue}{-2}\\
-\color{orange}{b_2} & & \color{orange}{b_6} & & \color{blue}{b_0} & & \color{blue}{b_4} \\
+\small\color{forestgreen}{+2} & & \small\color{forestgreen}{+2} & & \small\color{red}{+8} & & \small\color{red}{+8}\\\
+\color{green}{b_B} & & \color{green}{b_F} & & \color{red}{b_9} & & \color{red}{b_D} \\\
+ & & & \rightarrow\\\
+\small\color{forestgreen}{+2} & & \small\color{forestgreen}{+2} & & \small\color{red}{+8} & & \small\color{red}{+8}\\\
+\color{green}{b_A} & & \color{green}{b_E} & & \color{red}{b_8} & & \color{red}{b_C} \\\
+ & \uparrow & & & & \downarrow\\\
+\small\color{orange}{-8} & & \small\color{orange}{-8} & & \small\color{blue}{-2} & & \small\color{blue}{-2}\\\
+\color{orange}{b_3} & & \color{orange}{b_7} & & \color{blue}{b_1} & & \color{blue}{b_5} \\\
+ & & & \leftarrow\\\
+\small\color{orange}{-8} & & \small\color{orange}{-8} & & \small\color{blue}{-2} & & \small\color{blue}{-2}\\\
+\color{orange}{b_2} & & \color{orange}{b_6} & & \color{blue}{b_0} & & \color{blue}{b_4} \\\
 \end{matrix}$
 
-$\small\color{forestgreen}{+2}$ mask：$1100\_1100\_0000\_0000_2 \Rightarrow CC00_{16}$
-$\small\color{red}{+8}$ mask：$0011\_0011\_0000\_0000_2 \Rightarrow 3300_{16}$
-$\small\color{orange}{-8}$ mask：$0000\_0000\_1100\_1100_2 \Rightarrow 00CC_{16}$
-$\small\color{blue}{-2}$ mask：$0000\_0000\_0011\_0011_2 \Rightarrow 0033_{16}$
+$$\small\color{forestgreen}{+2}$$ mask：$$1100\_1100\_0000\_0000_2 \Rightarrow CC00_{16}$$
+$$\small\color{red}{+8}$$ mask：$$0011\_0011\_0000\_0000_2 \Rightarrow 3300_{16}$$
+$$\small\color{orange}{-8}$$ mask：$$0000\_0000\_1100\_1100_2 \Rightarrow 00CC_{16}$$
+$$\small\color{blue}{-2}$$ mask：$$0000\_0000\_0011\_0011_2 \Rightarrow 0033_{16}$$
 
 经过 `b = (b & 0xCC00) >> 2 | (b & 0x3300) >> 8 | (b & 0x00CC) << 8 | (b & 0x0033) << 2`：
 
 
 $\begin{matrix}
-\color{orange}{b_3} &             & \color{orange}{b_7} & & \color{green}{b_B} &             & \color{green}{b_F} \\
-\\
-\color{orange}{b_2} &             & \color{orange}{b_6} & & \color{green}{b_A} &             & \color{green}{b_E}\\
-\\
-\color{blue}{b_1} &             & \color{blue}{b_5} & & \color{red}{b_9} &             & \color{red}{b_D} \\
-\\
-\color{blue}{b_0} &             & \color{blue}{b_4} & & \color{red}{b_8} &             & \color{red}{b_C} \\
+\color{orange}{b_3} &             & \color{orange}{b_7} & & \color{green}{b_B} &             & \color{green}{b_F} \\\
+\\\
+\color{orange}{b_2} &             & \color{orange}{b_6} & & \color{green}{b_A} &             & \color{green}{b_E}\\\
+\\\
+\color{blue}{b_1} &             & \color{blue}{b_5} & & \color{red}{b_9} &             & \color{red}{b_D} \\\
+\\\
+\color{blue}{b_0} &             & \color{blue}{b_4} & & \color{red}{b_8} &             & \color{red}{b_C} \\\
 \end{matrix}$
 
 2D 顺时旋转 90$^\circ$ 完成！

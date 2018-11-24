@@ -27,13 +27,13 @@ static void rotate_r(ull& brd){
 }
 ```
 理解其原理后写了这篇文章。
-或许只是我不知道这动作的专业术语，若有缘人知道欢迎留言告诉啦！
+找不到或许只是我不知道这动作的专业术语，若有缘人知道欢迎留言告诉啦！
 
 ## 内容
 
 ### Bit 反转
 先从 bit 反转说起，[8 bit 反转](https://stackoverflow.com/questions/2602823/in-c-c-whats-the-simplest-way-to-reverse-the-order-of-bits-in-a-byte)可以这么做：
-```C
+```cpp
 unsigned char reverse(unsigned char b) {
    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
@@ -148,12 +148,12 @@ $\begin{matrix}
 对于 2D bitmap 旋转，同样的特性还是存在的。
 下图显示 2D 顺时旋转 90$^\circ$ 的结果：
 
-![](https://i.imgur.com/YgMVxoh.png) $\Rightarrow$ ![](https://i.imgur.com/PRm8oyK.png)
+| ![](https://i.imgur.com/YgMVxoh.png) | <br><br><br><br> $\Rightarrow$ | ![](https://i.imgur.com/PRm8oyK.png) |
 
 分解过程：
 小单位（4 分之 1 原图）自行顺时旋转 90$^\circ$，再视小单位为一体进行顺时旋转 90$^\circ$。
 
-![](https://i.imgur.com/9ZS3ygS.png) $\Rightarrow$ ![](https://i.imgur.com/DMjx93c.png) $\Rightarrow$ ![](https://i.imgur.com/4LNwQds.png)
+| ![](https://i.imgur.com/9ZS3ygS.png) | <br><br><br><br> $\Rightarrow$ | ![](https://i.imgur.com/DMjx93c.png) | <br><br><br><br> $\Rightarrow$ | ![](https://i.imgur.com/4LNwQds.png) |
 
 而第一步的自行顺时旋转若不是最小旋转单位（2\*2 bitmap）则一直分解下去。
 
@@ -235,20 +235,20 @@ $$\small\color{blue}{-1}$$ mask：$$0000\_0101\_0000\_0101_2 \Rightarrow 0505_{1
 
 经过 `b = (b & 0xA0A0) >> 1 | (b & 0x5050) >> 4 | (b & 0x0A0A) << 4 | (b & 0x0505) << 1`：
 
+
+
 $\begin{matrix}
-\tiny\color{orange}{+2}  &             & \tiny\color{forestgreen}{+2}  & & & \tiny\color{orange}{+8}  &             & \tiny\color{forestgreen}{+8}\\\
-\color{orange}{b_B} &             & \color{forestgreen}{b_F} & & & \color{orange}{b_9} &             & \color{forestgreen}{b_D} \\\
+\tiny\color{orange}{+2}  &             & \tiny\color{forestgreen}{+2}  & & \tiny\color{orange}{+8}  &             & \tiny\color{forestgreen}{+8}\\\
+\color{orange}{b_B} &             & \color{forestgreen}{b_F} & & \color{orange}{b_9} &             & \color{forestgreen}{b_D} \\\
 \\\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
-\tiny\color{blue}{+2}  &             & \tiny\color{red}{+2}  & & & \tiny
-\color{blue}{b_A} &             & \color{red}{b_E} & & & \color{blue}{b_8} &             & \color{red}{b_C} \\\
+\tiny\color{blue}{+2}  &             & \tiny\color{red}{+2}  & & \tiny\color{blue}{+8}  &             & \tiny\color{red}{+8} \\\
+\color{blue}{b_A} &             & \color{red}{b_E} & & \color{blue}{b_8} &             & \color{red}{b_C} \\\
 \\\
-\tiny\color{orange}{-8}  &             & \tiny\color{forestgreen}{-8}  & & & \tiny\color{orange}{-2}  &             & \tiny\color{forestgreen}{-2}\\\
-\color{orange}{b_3} &             & \color{forestgreen}{b_7} & & & \color{orange}{b_1} &             & \color{forestgreen}{b_5} \\\
+\tiny\color{orange}{-8}  &             & \tiny\color{forestgreen}{-8}  & & \tiny\color{orange}{-2}  &             & \tiny\color{forestgreen}{-2}\\\
+\color{orange}{b_3} &             & \color{forestgreen}{b_7} & & \color{orange}{b_1} &             & \color{forestgreen}{b_5} \\\
 \\\
-\uparrow & & \downarrow & & & \uparrow & & \downarrow\\\
-\tiny\color{blue}{-8}  &             & \tiny\color{red}{-8}  & & & \tiny
-\color{blue}{b_2} &             & \color{red}{b_6} & & & \color{blue}{b_0} &             & \color{red}{b_4} \\\
+\tiny\color{blue}{-8}  &             & \tiny\color{red}{-8}  & & \tiny\color{blue}{-2}  &             & \tiny\color{red}{-2} \\\
+\color{blue}{b_2} &             & \color{red}{b_6} & & \color{blue}{b_0} &             & \color{red}{b_4} \\\
 \end{matrix}$
 
 

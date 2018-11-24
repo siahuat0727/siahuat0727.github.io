@@ -5,7 +5,7 @@ author: "siahuat0727"
 catalog: true
 tags:
     - 2D bitmap rotate
-    - 2D bitmap reflex
+    - 2D bitmap flip
     - 2D 位图旋转
     - 2D 位图反射
 ---

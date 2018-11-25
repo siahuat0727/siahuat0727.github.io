@@ -13,7 +13,7 @@ tags:
 ## 前言
 
 之前写黑白棋 AI，棋盘的 data structure 用的是 bitmap（2 个 64-bit 分别储存黑棋与白棋的分布），在加速搜索的过程中，用了 transposition table 减少重复运算。
-而若将某次搜索结果通过**棋盘旋转、反射**等记录在 transposition table 中，可进一步减少重复的运算。
+而若在前期将每一步的搜索结果通过**棋盘旋转、反射**等记录在 transposition table 中，可进一步减少重复的运算。
 当时想要快速进行这些旋转、反射，搜了各种关键字，什么 rotate 2D bitmap， rotate bit matrix， 位图旋转，位 2D 旋转竟然都找不到相关资料。
 最后终于在 [Nugnikoll 的 GitHub repository](https://github.com/Nugnikoll/MyReversi/blob/3fc9edf19f838e77bcdf03ae226add1e70422c5d/cpp/reversi.h#L253)（目前 Botzone 黑白棋冠军）找到对应的实现：
 ```cpp

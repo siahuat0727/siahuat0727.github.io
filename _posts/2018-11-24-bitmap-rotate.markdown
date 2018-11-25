@@ -82,7 +82,7 @@ b_7 & b_6 & b_5 & b_4 & b_3 & b_2 & b_1 & b_0
 \end{matrix}$
 
 
-#### 第一次位移：
+#### 第一次位移
 
 
 $\begin{matrix}
@@ -105,7 +105,7 @@ $\begin{matrix}
 \color{red}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_4} & \color{forestgreen}{b_5} & \color{red}{b_2} & \color{forestgreen}{b_3} & \color{red}{b_0} & \color{forestgreen}{b_1}
 \end{matrix}$
 
-#### 第二次位移：
+#### 第二次位移
 
 $\begin{matrix}
 \tiny\color{forestgreen}{+4}  & \tiny\color{forestgreen}{+4}  & \tiny\color{red}{+4}  & \tiny\color{red}{+4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{forestgreen}{-4}  & \tiny\color{red}{-4}  & \tiny\color{red}{-4}\\\
@@ -123,7 +123,7 @@ $\begin{matrix}
 \color{red}{b_4} & \color{red}{b_5} & \color{forestgreen}{b_6} & \color{forestgreen}{b_7} & \color{red}{b_0} & \color{red}{b_1} & \color{forestgreen}{b_2} & \color{forestgreen}{b_3}
 \end{matrix}$
 
-#### 第三次位移：
+#### 第三次位移
 
 $\begin{matrix}
 \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{forestgreen}{+4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}  & \small\color{red}{-4}\\\
@@ -208,7 +208,7 @@ $\begin{matrix}
 {b_3} & & {b_2} & & {b_1} & & {b_0} \\\
 \end{matrix}$
 
-#### 第一次位移：
+#### 第一次位移
 
 $\begin{matrix}
 \tiny\color{forestgreen}{+2}  &             & \tiny\color{red}{+2}  & & & \tiny\color{forestgreen}{+8}  &             & \tiny\color{red}{+8}\\\
@@ -252,7 +252,7 @@ $\begin{matrix}
 \end{matrix}$
 
 
-#### 第二次位移：
+#### 第二次位移
 
 $\begin{matrix}
 \small\color{forestgreen}{+2} & & \small\color{forestgreen}{+2} & & \small\color{red}{+8} & & \small\color{red}{+8}\\\
@@ -300,7 +300,7 @@ unsigned int cw_rotate_16(unsigned int b)
 
 再次说明，通过观察分解目标距离，可以发现**顺序对调**是**不会影响结果**的。
 
-再看 64-bit 的版本，相信不难理解。
+再看 64-bit 的版本：
 
 ```cpp
 static void rotate_r(ull& brd){
@@ -313,7 +313,8 @@ static void rotate_r(ull& brd){
 }
 ```
 
-对角反射、上下反射、逆时旋转、180$^\circ$ 旋转等都可以通过相同想法一步步实现出来。
+相信可以順利理解。
+此外，对角反射、上下反射、逆时旋转、180$^\circ$ 旋转等都可以通过相同想法一步步实现出来。
 
 ## 结语
 

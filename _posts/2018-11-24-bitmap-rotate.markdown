@@ -139,7 +139,7 @@ $\begin{matrix}
 \color{red}{b_0} & \color{red}{b_1} & \color{red}{b_2} & \color{red}{b_3} & \color{forestgreen}{b_4} & \color{forestgreen}{b_5} & \color{forestgreen}{b_6} & \color{forestgreen}{b_7}
 \end{matrix}$
 
-另外，通过这种分解，可以发现每一次的位移都不会影响到每个位置的目标距离，也就是说，**三次位移的顺序任意对调，是不会影响结果的。**
+另外，通过分解目标距离，可以发现每一次的位移都不会影响到每个位置的目标距离，也就是说，**三次位移的顺序任意对调，是不会影响结果的。**
 
 ### 2D bitmap 旋转
 
@@ -196,7 +196,7 @@ $\begin{matrix}
 {b_F} & & {b_E} & & {b_D} & & {b_C} \\\
 \\\
 \tiny\color{forestgreen}{+2} & & \tiny\color{forestgreen}{+2}  & & \tiny\color{forestgreen}{+8} & & \tiny\color{forestgreen}{+8} & \\\
-\tiny\color{forestgreen}{-1} & & \tiny\color{forestgreen}{-4}  &             & \tiny\color{forestgreen}{-1}  & & \tiny\color{forestgreen}{-4}  \\\
+\tiny\color{forestgreen}{-4} & & \tiny\color{forestgreen}{-1}  &             & \tiny\color{forestgreen}{-4}  & & \tiny\color{forestgreen}{-1}  \\\
 {b_B} & & {b_A} & & {b_9} & & {b_8} \\\
 \\\
 \tiny\color{forestgreen}{-8}  &             & \tiny\color{forestgreen}{-8}  & & \tiny\color{forestgreen}{-2}  &             & \tiny\color{forestgreen}{-2}\\\

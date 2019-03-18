@@ -47,7 +47,7 @@ layout: default
                 col-md-10 col-md-offset-1
                 post-container">
 
-                                {{ content }}
+				{{ content }}
 
                 <hr>
 
@@ -64,21 +64,21 @@ layout: default
                     {% endif %}
                 </ul>
 
-            <div id="gitmentContainer">
-                    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-                    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-                    <script>
-                            var gitment = new Gitment({
-                                    owner: 'siahuat727',
-                                    repo: 'siahuat0727.github.io',
-                                    oauth: {
-                                            client_id: '7e7de2c751fc92ee0b0b',
-                                            client_secret: '779328097388bbf12d0bdc4a228007d3ef04bd67',
-                                    },
-                            });
-                            gitment.render('gitmentContainer');
-                    </script>
-            </div>
+	    <div id="gitmentContainer">
+		    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+		    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+		    <script>
+			var gitment = new Gitment({
+			owner: 'siahuat0727',
+			repo: 'siahuat0727.github.io',
+			oauth: {
+				client_id: '7e7de2c751fc92ee0b0b',
+				client_secret: '779328097388bbf12d0bdc4a228007d3ef04bd67',
+			},
+			});
+			gitment.render('gitmentContainer');
+		    </script>
+	    </div>
 
             </div>
 
@@ -109,19 +109,19 @@ layout: default
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                                        {% for tag in site.tags %}
+        				{% for tag in site.tags %}
                             {% if tag[1].size > {{site.featured-condition-size}} %}
-                                                <a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
+                				<a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
                                     {{ tag[0] }}
                                 </a>
                             {% endif %}
-                                        {% endfor %}
-                                </div>
+        				{% endfor %}
+        			</div>
                 </section>
                 {% endif %}
 
             </div>
-        </div>
+	</div>
     </div>
 </article>
 

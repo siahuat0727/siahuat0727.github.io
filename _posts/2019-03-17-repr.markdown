@@ -6,7 +6,6 @@ catalog: true
 tags:
     - RePr 复现
     - RePr implementation
-    - Neural Network
 ---
 
 ## 前言
@@ -26,11 +25,13 @@ tags:
 
 方法
 
++ ![](https://i.imgur.com/p3P0OkF.png)
+  白色区：S1 stage
+  灰色区：S2 stage
+
 + S1 stage 结束时以作者提出的 inter-filter orthogonality（将 filters 各 flatten 成一维向量，计算每个 filter 与其他 filters 的向量内积之和）为评分标准，将正交性较差的进行剪枝。
 + S2 stage 过程只以剩下的 filters 进行训练，最后再将被剪枝的 filters 重新初始化训练。
-+ ![](https://i.imgur.com/p3P0OkF.png)
 
-   |白色区：S1 stage   |  灰色区：S2 stage ||||||||||||||||||||
 
 ## 基本做法
 
@@ -63,29 +64,28 @@ tags:
 数据集：CIFAR-10
 
 模型：vanilla cnn $C^3(32)$
-
-||||||![](https://i.imgur.com/7wwDIMz.png)||||||
+![](https://i.imgur.com/DEZUDZA.png)
 
 ### 论文结果
 
 ![](https://i.imgur.com/fzobyey.png)
 
-Std  | RePr |||||||||||||||||||||||||||||||||||
----- | ---- |
-72.1 | 76.4 |
+Std  | RePr
+---- | ----
+72.1 | 76.4
 
 
 ### 目前结果
 
 实验设定：
 + general：100 epochs
-+ RePr 超参：S1 = 20， S2 = 10，prune-ratio = 0.3
++ RePr 超参：S1 = 20， S2 = 10，prune_ratio = 0.3
 
-Std  | RePr |||||||||||||||||||||||||||||||||||
----- | ----
-77.84| 74.05
+Std   | RePr
+----  | ----
+77.84 | 74.05
 
-**加上 tensorboard 视觉化 Acc：**（深蓝色是 standard， 浅蓝色是 RePr）
+**加上 tensorboard 视觉化 Acc：**（红色是 standard， 蓝色是 RePr）
 
 ![](https://i.imgur.com/scW5APy.png)
 

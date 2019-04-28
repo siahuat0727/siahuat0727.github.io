@@ -138,20 +138,21 @@ Std  | RePr |||||||||||||||||||||||||||||||||||
 |--|--|--|
 |![](/img/in-post/repr/reverse.png)| ![](/img/in-post/repr/repr-map.png)| ![](/img/in-post/repr/reverse-repr-map.png)|
 
-Reverse RePr 每次剪枝 acc 越掉越多。可以肯定的是 layer 之间 ranking 还有更公平的比较规则。
+Reverse RePr 每次剪枝 acc 越掉越多，因此 inter-filter orthogonality 是有效的。
+但可以确定的是 layer 之间的 ranking 肯定还有更公平的比较规则。
 
 
 
 ## 思考
 
 目前 RePr 效果不佳可能原因：
-+ RePr 流程主要提升泛化性，可能目前跑的实验比较不适用
++ RePr 流程主要提升泛化性，重点在于解决 overfitting
   > **Abstract**
   > ...
-  > We show that by tem-porarily pruning and then restoring a subset of the model’sfilters, and repeating this process cyclically, overlap in thelearned features is reduced,  producing **improved generalization**.
+  > We show that by temporarily pruning and then restoring a subset of the model’s filters, and repeating this process cyclically, overlap in the learned features is reduced,  producing **improved generalization**.
   > ...
 + 实验设定有些不同（standard 跑起来并不像论文那样 train acc 90%, test acc 70%）
-+ 还有一些不清楚的细节
++ 还有一些不清楚的细节（如 layer 之间的 ranking 规则）
 + code 有 bug
 
 

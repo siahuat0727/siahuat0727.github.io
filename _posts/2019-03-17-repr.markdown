@@ -110,6 +110,7 @@ Std  | RePr |||||||||||||||||||||||||||||||||||
 
 若将 learning rate 调小至 0.003，epoch 数增加，可以观察到 RePr 似乎确实带来一些 generalization 的效果。
 
+|<font color="red">Standard</font> vs. <font color="green">RePr</font>| Filters on/off map|
 |![](/img/in-post/repr/overfit.png)|![](/img/in-post/repr/zero-map.png)|
 
 但同样的实验设定下，用上 <font color="orange">random crop</font> 的结果明显更优。

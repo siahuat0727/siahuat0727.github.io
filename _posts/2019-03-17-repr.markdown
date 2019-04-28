@@ -104,11 +104,10 @@ Std  | RePr |||||||||||||||||||||||||||||||||||
 #### Overfitting?
 
 论文曲线 train acc 最终在 90% 左右，test acc 在 70% 左右，有较严重的 overfitting。但我们的 train acc 甚至比 test acc 略低，这是 PyTorch 的 data augmentation `torchvision.transforms.RandomCrop` 带来的影响。若不做 random crop，则 training acc 会直接接近 100，testing acc 60++。（详见下面的实验结果）
-在 prune 之后 test acc 反而一直掉：
 
 ![](/img/in-post/repr/overfit-0.01.png)
 
-若将 learning rate 调小至 0.003，epoch 数增加，可以观察到 RePr 似乎确实带来一些 generalization 的效果。
+若将 learning rate 调小至 0.003，epoch 数增加，可以观察到 RePr 确实带来一些 generalization 的效果。
 
 |<font color="red">Standard</font> vs. <font color="green">RePr</font>| Filters on/off map|
 |![](/img/in-post/repr/overfit.png)|![](/img/in-post/repr/zero-map.png)|

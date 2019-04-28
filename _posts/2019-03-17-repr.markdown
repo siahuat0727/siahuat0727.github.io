@@ -28,7 +28,7 @@ tags:
 
 + S1 stage 结束时以作者提出的 inter-filter orthogonality（将 filters 各 flatten 成一维向量，计算每个 filter 与其他 filters 的向量内积之和）为评分标准，将正交性较差的进行剪枝。
 + S2 stage 过程只以剩下的 filters 进行训练，最后再将被剪枝的 filters 重新初始化训练。
-+ ![](https://i.imgur.com/p3P0OkF.png)
++ ![](/img/in-post/repr/paper-result.png)
 
    |白色区：S1 stage   |  灰色区：S2 stage ||||||||||||||||||||
 
@@ -51,12 +51,12 @@ tags:
     + 对 $C^3(32)$ 的模型来说，第一层有 32 个 filters，每个 filter 的参数量（若 kernel size 为 3x3）是3x3x3，这样一来 flatten 之后的矩阵是32x27，null space 是空集，没有正交的 filter。
     + 作者：
         >You can relax the requirement that the new filter has to be orthogonal to all the filters. There is no proper heuristics, but you can use orthogonal ranking to find the most overlapping ones and only use those to compute the re-initialization
-    + 目前做法：以 pytorch 预设初始 conv2d weights 的方式初始化。[source](https://github.com/pytorch/pytorch/blob/08891b0a4e08e2c642deac2042a02238a4d34c67/torch/nn/modules/conv.py#L40-L47)
+    + 目前做法：以 PyTorch 预设初始 conv2d weights 的方式初始化。[source](https://github.com/pytorch/pytorch/blob/08891b0a4e08e2c642deac2042a02238a4d34c67/torch/nn/modules/conv.py#L40-L47)
 + Null space vertor 与 filter 的对应关系？
     + QR decomposition （或其他方法）找到 null space 之后怎么利用这些正交的向量来对 filter 进行 reinitialize ？（如何 scaling 之类的）
     + 作者：
         >Yes, **random vectors** in the null space. Scale of this vector becomes important when you are dropping large percentage of filters. I tried various things including projecting the norm. However, I was running short on time thus I did a quick experimental thing that is **clip the weights** to be some upper-bound (if x > LIM then x = LIM).
-    + 目前做法：不做 scaling ，直接把 QR decomposition 找到的任意正交向量经过 clip 后当成 filter。（这些 vectors 的 weights 的 mean, variance 都不大）
+    + 目前做法：不做 scaling ，直接把 QR decomposition 找到的任意正交向量经过 clip 后当成 filter。
 
 ## 实验
 
@@ -64,11 +64,9 @@ tags:
 
 模型：vanilla cnn $C^3(32)$
 
-||||||![](https://i.imgur.com/7wwDIMz.png)||||||
+||||||![](/img/in-post/repr/vanilla.png)||||||
 
 ### 论文结果
-
-![](https://i.imgur.com/fzobyey.png)
 
 Std  | RePr |||||||||||||||||||||||||||||||||||
 ---- | ---- |
@@ -78,64 +76,68 @@ Std  | RePr |||||||||||||||||||||||||||||||||||
 ### 目前结果
 
 实验设定：
-+ general：100 epochs
-+ RePr 超参：S1 = 20， S2 = 10，prune-ratio = 0.3
++ general：100 epochs, learning rate = 0.01
++ RePr 超参：S1 = 20, S2 = 10, prune-ratio = 0.3
 
 Std  | RePr |||||||||||||||||||||||||||||||||||
 ---- | ----
-77.84| 74.05
+77.84| 74.48
 
-**加上 tensorboard 视觉化 Acc：**（深蓝色是 standard， 浅蓝色是 RePr）
+**加上 tensorboardX 视觉化:**
 
-![](https://i.imgur.com/scW5APy.png)
+|<font color="orange">Standard</font> vs. <font color="blue">RePr</font>| Filters on/off map|
+|![](/img/in-post/repr/result.png)| ![](/img/in-post/repr/repr-map.png)|
+
 
 **与论文结果对比：**
-![](https://i.imgur.com/H01zKJy.png)
 
-**共同点：**
-+ 跟论文一样会对后面 layer 的 pruning 比较多（S2 stage 中）：
-	```
-	filter sparsity of layer module.conv1.weight is 0.03125
-	filter sparsity of layer module.conv2.weight is 0.125
-	filter sparsity of layer module.conv3.weight is 0.75
-	```
+![](/img/in-post/repr/paper-result.png)
 
-**不同点：**
-+ training acc 曲线比较接近，但 reinitialize 之后没特别快的回升。
-
-+ standard test acc 特别高。
-
-+ 论文曲线 train acc 最终在 90% 左右，test acc 在 70% 左右，有较严重的 overfitting。但我们的 train acc 甚至比 test acc 略低，这是 pytorch 对 image 的预处理 random crop 造成的。若不做 random crop，则 training acc 会直接接近 100，testing acc 60 左右。（详见下面的实验结果）
+#### 不同点
++ training acc 曲线比较接近，但 reinitialize 之后没特别明显的回升。
++ 论文有明显的 overfitting。
++ 倾向于 prune 浅层的 filters。
 
 
 ### 其他尝试
 
-#### 对应 channels 不重新初始化
+#### Overfitting?
 
-一开始在 reinitialize 时没把下一层对应的 channels 设 0（但不确定这么做对不对），可以看到在 reinitialize 之后会有明显的掉点。
-
-![](https://i.imgur.com/2qYoUMF.png)
-
-#### 不使用 random crop，刻意让其 overfitting
-
+论文曲线 train acc 最终在 90% 左右，test acc 在 70% 左右，有较严重的 overfitting。但我们的 train acc 甚至比 test acc 略低，这是 PyTorch 的 data augmentation `torchvision.transforms.RandomCrop` 带来的影响。若不做 random crop，则 training acc 会直接接近 100，testing acc 60++。（详见下面的实验结果）
 在 prune 之后 test acc 反而一直掉：
 
-![](https://i.imgur.com/ywUvvko.png)
+![](/img/in-post/repr/overfit-0.01.png)
 
-#### 改测 CIFAR-100 数据集
+若将 learning rate 调小至 0.003，epoch 数增加，可以观察到 RePr 似乎确实带来一些 generalization 的效果。
 
-Acc 曲线差不多，即目前的实现结果 RePr 较差：
+|![](/img/in-post/repr/overfit.png)|![](/img/in-post/repr/zero-map.png)|
 
-![](https://i.imgur.com/sIJALFA.png)
+但同样的实验设定下，用上 <font color="orange">random crop</font> 的结果明显更优。
+
+![](/img/in-post/repr/randomcrop.png)
+
+#### Zero-initialization or Random-initialization?
+
+将 filters prune 了之后，下一层与其相接的参数该怎么初始化，这是论文里面没详细描述的。这里尝试了两种不同初始化方法的结果：
+
+|<font color="green">zero-initialization</font> vs. <font color="cyan">random-initialization</font>|<font color="green">zero map</font>|<font color="cyan">random map</font>|
+|--|--|--|
+|![](/img/in-post/repr/zero-vs-random.png)|![](/img/in-post/repr/zero-map.png)| ![](/img/in-post/repr/random-map.png)|
+
+在 re-initalize 阶段，random-initialization 有较明显的掉点，但之后会有较快的回升，zero-initialization 反之。
+而论文同时集两种初始化好处于一身，re-initialize 不掉点，回升快。
+另一个显著的差异是 zero-initialization 的方式会让被 prune filter 的选择往后传，但还是和论文中倾向于较深 filters 的剪枝不太一样。
+总之实现上大概还有些不太一样的细节。
 
 #### 反其道而行
 
-尝试对 inter-filter orthogonality 值较低（正交性较佳）的进行剪枝（红色曲线，浅蓝为对照组）：
+尝试对 inter-filter orthogonality 值较低（正交性较佳）的进行剪枝：
 
+|<font color="blue">RePr</font> vs. <font color="orange">Reverse RePr</font>|<font color="blue">RePr</font>|<font color="orange">Reverse RePr</font>|
+|--|--|--|
+|![](/img/in-post/repr/reverse.png)| ![](/img/in-post/repr/repr-map.png)| ![](/img/in-post/repr/reverse-repr-map.png)|
 
-![](https://i.imgur.com/pDAsssq.png)
-
-浅蓝确实表现良好。
+Reverse RePr 每次剪枝 acc 越掉越多。可以肯定的是 layer 之间 ranking 还有更公平的比较规则。
 
 
 
@@ -155,3 +157,4 @@ Acc 曲线差不多，即目前的实现结果 RePr 较差：
 ## 结语
 
 各方面新手，非常欢迎路过的有缘人给点建议啦！
+在此特别感谢热心的网友陆续给我发 [GitHub Issues](https://github.com/siahuat0727/RePr/issues) 帮我 debug (￣▽￣")

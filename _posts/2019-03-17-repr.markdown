@@ -96,7 +96,7 @@ Std  | RePr |||||||||||||||||||||||||||||||||||
 #### 不同点
 + training acc 曲线比较接近，但 reinitialize 之后没特别明显的回升。
 + 论文有明显的 overfitting。
-+ 倾向于 prune 浅层的 filters。
++ 倾向于 prune 浅层的 filters，[知乎](https://zhuanlan.zhihu.com/p/62522499)上也有人遇到同样的问题。
 
 
 ### 其他尝试

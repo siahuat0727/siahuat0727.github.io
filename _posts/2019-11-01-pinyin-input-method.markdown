@@ -103,8 +103,6 @@ Archive:  data.zip
    creating: sina_news_gbk/
   inflating: sina_news_gbk/2016-09.txt
   ...
-
-training_data$ rm data.zip
 ```
 
 *注：里面的文件都是 gbk 编码*
@@ -198,7 +196,10 @@ Saved ../model/model.pkl
 ### 概率计算
 
 利用条件概率的公式，句子$w_1w_2...w_m$ 出现的概率可展开为，
-$P(w_1, w_2, ..., w_m) = P(w_1) \cdot P(w_2\|w_1) \cdot P(w_3\|w_1, w_2) \cdot \dots \cdot  P(w_n\|w_1, w_2,...,w_{n-1})$ 但条件概率 $P(w_n\|w_1, w_2,...,w_{n-1})$ 的可能性太多，无法估算，于是数学家马尔科夫提出一个简单但很有效的假设，即任意一个字 $w_i$ 的出现只与它前面的字 $w_\{i-1\}$ 有关，于是模型变得非常简单。
+
+$P(w_1, w_2, ..., w_m) = P(w_1) \cdot P(w_2\|w_1) \cdot P(w_3\|w_1, w_2) \cdot \dots \cdot  P(w_n\|w_1, w_2,...,w_{n-1})$
+
+但条件概率 $P(w_n\|w_1, w_2,...,w_{n-1})$ 的可能性太多，无法估算，于是数学家马尔科夫提出一个简单但很有效的假设，即任意一个字 $w_i$ 的出现只与它前面的字 $w_\{i-1\}$ 有关，于是模型变得非常简单。
 
 #### 2 元字模型
 
@@ -208,7 +209,7 @@ $P(w_1, w_2, ..., w_m) = P(w_1) \cdot P(w_2\|w_1) \cdot P(w_3\|w_1, w_2) \cdot \
 
 $$P(w_1,w_2,...,w_m) = \prod_{i=2}^m P(w_i|w_{i-1})$$
 
-> 公式参考自作业 ppt
+> 公式参考自作业 ppt，实际上疏忽了一个细节，见[关于第一个字出现的概率](#1-关于第一个字出现的概率)。
 
 而
 
@@ -613,7 +614,8 @@ $c$：每个拼音对应 $c$ 个汉字（简单假设）
 
 ### 2. 关于 `total` 魔法
 
-回顾概率的计算：
+回顾概率的计算：（公式假设 $k_1$ 为单个汉字，对于 $k_1$ 为多个汉字的情况，见[这里](#1-n-元模型包含-n-1-元n-2-元2-元模型)的推广）
+
 $$P(k_2|k_1) = \frac{ \# (k_1,k_2)}{\# k_1}$$
 
 首先，需要一个 `model[k1][k2]` 记录文字 $k1$ 后面紧挨着汉字 $k2$ 的次数 #$(k_1, k_2)$。
@@ -902,9 +904,14 @@ def main():
   ...
 ```
 
-### 6. Inner Function
+### 6. 推荐阅读
 
-以下例子大概是 Inner function 的一种标准使用情景。
+代码用了大量的 Inner function, Generator comprehension, List comprehension 等等好东西，若不熟悉，建议阅读以下推荐。
+
+##### 1. Inner function
+
+这例子大概是 Inner function 的一种标准使用情景。
+
 ```python
 def train(args, ...):
   def do_train(path):
@@ -921,10 +928,29 @@ def train(args, ...):
 
 推荐阅读：[Python Inner Functions—What Are They Good For?](https://realpython.com/inner-functions-what-are-they-good-for)
 
+##### 2. Generator comprehension
+
+这例子从一整个字符串中取出每个连续的 n 元，特别简洁易懂，且因为 lazy，不**事先**占多余的内存空间。不过这写法感觉还不够高效（指展开方式的 cache 友好相关，不是 generator comprehension 本身），应该有更好的实现……
+
+> A generator comprehension is the lazy version of a list comprehension.
+
+
+```python
+n_grams = (
+    words[s: s+args.n_gram]
+    for s in range(len(words) - args.n_gram + 1)
+)
+for n_gram in n_grams:
+  ...
+```
+
+推荐阅读：[How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)
+
+
 ## 结语
 
 代码尽力以目前的能力做了简洁与可读性之间的 trade-off，但终究经验不足功力不够，欢迎有缘人的分享与讨论啦！
 完整代码见 [GitHub repo](https://github.com/siahuat0727/PinYin)。
 
-> 评论功能坏了，有任何建议欢迎发 [GitHub Issue](https://github.com/siahuat0727/PinYin/issues)～
+> 有任何建议，大至正宗 pythonic 的写法，小至变量命名，都欢迎分享至 [GitHub Issue](https://github.com/siahuat0727/PinYin/issues)～（评论功能坏了）
 > 不知道这样对不对。。。嘛真有人发了再说（（

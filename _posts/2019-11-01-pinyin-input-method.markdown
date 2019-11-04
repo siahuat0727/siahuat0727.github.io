@@ -24,8 +24,8 @@ qing hua da xue
 3. `training_data/一二级汉字表.txt`：汉字表。e.g. `啊阿埃挨哎唉哀皑癌蔼矮艾碍爱...`
 
 **测试**
-1. `testing_data/news.txt`：测试文字（答案），[爬虫教学](https://blog.csdn.net/qq_33722172/article/details/82469050)爬近期新浪新闻+预处理。（约 8 万字）
-2. `testing_data/input.txt`：测试拼音（题目），[汉字拼音在线转换](https://www.qqxiuzi.cn/zh/pinyin/)+预处理。
+1. [`testing_data/news.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/news.txt)：测试文字（答案），[爬虫教学](https://blog.csdn.net/qq_33722172/article/details/82469050)爬近期新浪新闻+预处理。（约 8 万字）
+2. [`testing_data/input.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/input.txt)：测试拼音（题目），[汉字拼音在线转换](https://www.qqxiuzi.cn/zh/pinyin/)+预处理。
 3. 准确率计算：逐字计算。
 
 
@@ -35,7 +35,7 @@ qing hua da xue
 3. 完整代码见 [GitHub repo](https://github.com/siahuat0727/PinYin)。
 
 **成果**
-1. `testing_data/predict.txt`：4 元加速x完整版 DP [预测结果](https://github.com/siahuat0727/PinYin/blob/master/testing_data/predict.txt) v.s. [正确答案](https://github.com/siahuat0727/PinYin/blob/master/testing_data/news.txt)（字准确率 94.82%）
+1. [`testing_data/predict.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/predict.txt)：4 元加速x完整版 DP （字准确率 94.82%）
 
 ## Usage
 
@@ -327,7 +327,7 @@ $$P(w_1,w_2,...,w_m) = P(w_1) \cdot \prod_{i=2}^m P(w_i|w_{i-1})$$
 > 可爱： 817610/n * 4965/817610 = 4965/n
 > 可爱 > 溘埃
 
-#### 2. 关于 第一个字出现在句首 与 最后一个字出现在句尾 的概率
+#### 2. 关于 句首 与 句尾 的概率
 
 ##### 现象
 
@@ -443,6 +443,8 @@ $$P_{smooth}(w_i|w_{i-1}) = \lambda P(w_i|w_{i-1})+(1-\lambda)P(w_i)$$
 
 > Q: 这例子怎么找到的？
 > A: vimdiff smooth_1.0.out smooth_0.9.out
+
+*推荐阅读：更好的平滑算法-[Good-Turing平滑法](https://en.wikipedia.org/wiki/Good%E2%80%93Turing_frequency_estimation)*
 
 ### n 元字模型，n > 2
 
@@ -594,6 +596,18 @@ $c$：每个拼音对应 $c$ 个汉字（简单假设）
 ### 1. 关于 `@` 魔法
 
 将所有不存在于汉字表的字符转为 `@`。
+
+```python
+# Replace all unknown words to '@'
+words = ''.join(
+    word if words_exist[word] else '@'
+    for word in words
+)
+# Add '@' to both head and end of the string
+words = f'@{words}@'  # this looks so cute!
+# Remove duplicate '@'
+words = re.sub(r'(@)\1+', r'\1', words)
+```
 
 处理前
 + `原标题：『糖友梦·健康梦』活动4月12日，由中华糖尿病协会发起的“糖友梦·健康梦”活动将走进宝鸡。`
@@ -950,7 +964,7 @@ for n_gram in n_grams:
 ## 结语
 
 代码尽力以目前的能力做了简洁与可读性之间的 trade-off，但终究经验不足功力不够，欢迎有缘人的分享与讨论啦！
-完整代码见 [GitHub repo](https://github.com/siahuat0727/PinYin)。
+完整代码见 [GitHub repo](https://github.com/siahuat0727/PinYin)。也欢迎点 star 鼓励 >.<
 
 > 有任何建议，大至正宗 pythonic 的写法，小至变量命名，都欢迎留言分享～
 > 若评论功能坏了欢迎直接发 [GitHub Issue](https://github.com/siahuat0727/PinYin/issues)～不知道这样对不对。。。嘛真有人发了再说（（

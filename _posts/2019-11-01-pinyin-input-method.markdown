@@ -261,7 +261,7 @@ P(w_{i,j}) & \quad  \text{if } i = 1
 
 $$T_{i, *} = \mathop{\arg\max}_{T_i \in \{T_{i, 1}, T_{i, 2}, ..., T_{i, |W_i|}\}}P(T_i)$$
 
-> 第一次自己写这类公式，不知道写得对不对清不清楚，有任何错误或建议欢迎指点啦！[GitHub Issue](https://github.com/siahuat0727/PinYin/issues)
+> 第一次自己写这类公式，不知道写得对不对清不清楚，有任何错误或建议欢迎留言指点啦！[传送门](#结语)
 
 目标：找到 $T_{m,*}$ 作为输出。
 
@@ -952,5 +952,5 @@ for n_gram in n_grams:
 代码尽力以目前的能力做了简洁与可读性之间的 trade-off，但终究经验不足功力不够，欢迎有缘人的分享与讨论啦！
 完整代码见 [GitHub repo](https://github.com/siahuat0727/PinYin)。
 
-> 有任何建议，大至正宗 pythonic 的写法，小至变量命名，都欢迎分享至 [GitHub Issue](https://github.com/siahuat0727/PinYin/issues)～（评论功能坏了）
-> 不知道这样对不对。。。嘛真有人发了再说（（
+> 有任何建议，大至正宗 pythonic 的写法，小至变量命名，都欢迎留言分享～
+> 若评论功能坏了欢迎直接发 [GitHub Issue](https://github.com/siahuat0727/PinYin/issues)～不知道这样对不对。。。嘛真有人发了再说（（

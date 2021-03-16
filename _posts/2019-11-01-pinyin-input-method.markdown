@@ -8,6 +8,14 @@ tags:
     - n元字模型
 ---
 
+## 前言
+
+这是一份课堂作业，内容很经典，不过搜了一圈发现网络上大部分都自己手磕 2 元 + 3 元模型。
+
+但我同时还想看看 4 元的效果怎么样呀，也不希望对每个 n 元都自己手磕模型，于是诞生了这篇任意 n 元字模型的实现与分析。
+
+就反正做都做了，让它创造更多的价值吧。（同时给自己一个把这份作业做得更好的动力xP）
+
 ## 介绍
 
 输入拼音，输出汉字。
@@ -25,7 +33,7 @@ qing hua da xue
 
 **测试**
 1. [`testing_data/news.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/news.txt)：测试文字（答案），[爬虫教学](https://blog.csdn.net/qq_33722172/article/details/82469050)爬近期新浪新闻+预处理。（约 8 万字）
-2. [`testing_data/input.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/input.txt)：测试拼音（题目），[汉字拼音在线转换](https://www.qqxiuzi.cn/zh/pinyin/)+预处理。
+2. [`testing_data/pinyin.txt`](https://github.com/siahuat0727/PinYin/blob/master/testing_data/pinyin.txt)：测试拼音（题目），[汉字拼音在线转换](https://www.qqxiuzi.cn/zh/pinyin/)+预处理。
 3. 准确率计算：逐字计算。
 
 
